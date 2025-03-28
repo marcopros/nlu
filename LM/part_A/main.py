@@ -16,11 +16,9 @@ import numpy as np
 from model import LM_LSTM
 
 
-
+TRAIN = True # if True it will train the model from scratch
 
 if __name__ == "__main__":
-    #Wrtite the code to load the datasets and to run your functions
-    # Print the results
     train_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.train.txt')
     dev_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.valid.txt')
     test_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.test.txt')
@@ -61,7 +59,7 @@ if __name__ == "__main__":
     best_model = None
     pbar = tqdm(range(1,n_epochs))
     
-
+if TRAIN:
     for epoch in pbar:
             loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    
             if epoch % 1 == 0:  # validate every epoch
@@ -86,4 +84,14 @@ if __name__ == "__main__":
     final_ppl,  _ = eval_loop(test_loader, criterion_eval, best_model)    
             
     print('Test ppl: ', final_ppl)
+
+    # Save the model and create plots
+    folder = create_new_report_directory()
+    plot_loss_curve(sampled_epochs, losses_train, losses_dev, os.path.join(folder, 'plot.png'))
+    plot_perplexity_curve(sampled_epochs, perplexity_list, os.path.join(folder, 'ppl_plot.png'))
+    torch.save(best_model.state_dict(), os.path.join(folder, "weights.pt"))
+    generate_training_report(sampled_epochs[-1], n_epochs, lr, hid_size, emb_size, str(type(model)), str(type(optimizer)),final_ppl, os.path.join(folder,"report.txt"))
+
+    
+
 
