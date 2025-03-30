@@ -1,27 +1,31 @@
+# Import necessary libraries
 import os
 import math
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 
+# Training loop function
 def train_loop(data, optimizer, criterion, model, clip=5):
     model.train()
     loss_array = []
     number_of_tokens = []
     
+    # Loop through the training data
     for sample in data:
-        optimizer.zero_grad() 
+        optimizer.zero_grad()   # Zeroing accumulated gradients
         output = model(sample['source'])
         loss = criterion(output, sample['target'])
         loss_array.append(loss.item() * sample["number_tokens"])
         number_of_tokens.append(sample["number_tokens"])
-        loss.backward() 
+        loss.backward()    # Perform backpropagation
         torch.nn.utils.clip_grad_norm_(model.parameters(), clip)  
-        optimizer.step() 
-        
+        optimizer.step()   # Update model's parameters
+
+    # Return the average loss weighted by the number of tokens    
     return sum(loss_array)/sum(number_of_tokens)
 
-
+# Evaluates the model on given dataset, returns PPL and average loss
 def eval_loop(data, eval_criterion, model):
     model.eval()
     loss_to_return = []
@@ -38,7 +42,7 @@ def eval_loop(data, eval_criterion, model):
     loss_to_return = sum(loss_array) / sum(number_of_tokens)
     return ppl, loss_to_return
 
-
+# Initializes weights of model's layers 
 def init_weights(mat):
     for m in mat.modules():
         if type(m) in [nn.GRU, nn.LSTM, nn.RNN]:
@@ -59,7 +63,7 @@ def init_weights(mat):
                 if m.bias != None:
                     m.bias.data.fill_(0.01)
 
-# Function to get the latest index of files in a directory based on a base name
+# Function to retrieve the latest index of files in a directory that start with a given prefix
 def get_latest_index_in_directory(directory, prefix):
     # Get all files in the directory
     files = os.listdir(directory)
@@ -75,7 +79,7 @@ def get_latest_index_in_directory(directory, prefix):
     # Return the maximum index or -1 if no files match
     return max(indices) if indices else -1
 
-# Function to plot training and validation loss over epochs
+# Plots training and validation loss over epochs
 def plot_loss_curve(epochs, train_loss, validation_loss, filename):
     plt.figure(figsize=(10, 6))
     plt.plot(epochs, train_loss, label='Training Loss', marker='o')  
