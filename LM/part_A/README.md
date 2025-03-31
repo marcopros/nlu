@@ -17,7 +17,7 @@ In this part of the project, I applied several modifications to the baseline ```
    I replaced the Stochastic Gradient Descent (SGD) optimizer with AdamW. This change led to better training stability and convergence, contributing to a further reduction in Perplexity.
 
 ### Hyperparameter Optimization:
-I conducted hyperparameter optimization to fine-tune the model. In particular, I experimented with different learning rates, embedding and hidden sizes to minimize Perplexity. The best configuration was found with a learning rate of  $10^{-4}$, used in the third modification, which achieved the lowest Perplexity.
+I conducted hyperparameter optimization to fine-tune the model. In particular, I experimented with different learning rates, embedding and hidden sizes to minimize Perplexity. The best configuration was found with a learning rate of  $10^{-3}$, used in the last modification, which achieved the lowest Perplexity.
 
 The Perplexity for each experiment is shown below:
 - Baseline RNN: ```173.22```
