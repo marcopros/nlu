@@ -10,7 +10,7 @@ import os
 import torch.nn as nn
 import math
 import numpy as np
-from model import LM_LSTM
+from model import *
 
 
 TRAIN = True # if True it will train the model from scratch
@@ -35,16 +35,18 @@ if __name__ == "__main__":
     hid_size = 400
     emb_size = 400
 
-    lr = 0.0001 
+    lr = 0.0001
     clip = 5 
 
     model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
     model.apply(init_weights)
     
-    
+    #optimizer = optim.SGD(model.parameters(), lr=lr)
     optimizer = optim.AdamW(model.parameters(), lr=lr)
     criterion_train = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"])
-    criterion_eval = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"], reduction='sum')
+    criterion_eval = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"], reduction='sum')       
+
+    
 
     n_epochs = 100
     patience = 3

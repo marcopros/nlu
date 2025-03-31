@@ -1,0 +1,8 @@
+Epochs completed: 89 
+Total epochs: 100 
+Learning rate: 0.1 
+Hidden layer size: 100 
+Embedding size: 100 
+Model: <class 'model.LM_RNN'> 
+Optimizer: <class 'torch.optim.sgd.SGD'> 
+Final Perplexity: 173.22460169824595 
