@@ -30,6 +30,21 @@ Do not explain the backbone deep neural network (e.g. RNN or BERT). Instead, foc
 
 \section{Results}
 Add tables and explain how you evaluated your model. Tables and images of plots or confusion matrices do not count in the page limit.
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{lcccc}
+      \toprule
+      Model & PPL & LR & Hidden & Emb \\
+      \midrule
+      RNN                     & 173.22 & 0.1    & 100 & 100 \\
+      LSTM                    & 137.31 & 2      & 300 & 300 \\
+      LSTM + Var Dropout      & 123.14 & 2      & 300 & 300 \\
+      LSTM + Var Dropout + AdamW & 109.43 & 0.0001 & 400 & 400 \\
+      \bottomrule
+  \end{tabular}
+  \caption{Perplexity and hyperparameters of the models.}
+  \label{tab:results}
+\end{table}
 
 
 \bibliographystyle{IEEEtran}
