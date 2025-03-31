@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  30 MAR 2025 18:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  31 MAR 2025 10:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -240,13 +240,13 @@ L3 programming layer <2025-01-18>
 Here is how much of TeX's memory you used:
  4250 strings out of 473201
  68811 string characters out of 5716120
- 455681 words of memory out of 5000000
+ 454681 words of memory out of 5000000
  27475 multiletter control sequences out of 15000+600000
  574650 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,5n,79p,640b,262s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,5n,79p,613b,262s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.pdf" (1 page, 53733 bytes).
+Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.pdf" (1 page, 52528 bytes).
 PDF statistics:
  29 PDF objects out of 1000 (max. 8388607)
  17 compressed objects within 1 object stream
