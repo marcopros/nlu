@@ -31,23 +31,21 @@ Full detailed report is available in ```report.pdf```
 
 ## Directory Sructure
 ```
-LM/
-├── part_A/
-│     ├── dataset/ 
-│     │       ├── ptb.test.txt
-│     │       ├── ptb.train.txt
-│     │       └── ptb.valid.txt
-│     ├── reports/  
-│     │       └── test00/ 
-│     │             ├── plot.png
-│     │             ├── ppl_plot.png
-│     │             ├── weights.pt
-│     │             └── report.txt
-│     ├── functions.py
-│     ├── main.py
-│     ├── model.py
-│     ├── utils.py
-│     └── README.md 
-├── part_B/...
-└── report.pdf           
+LM/part_A
+├── README.md
+├── dataset
+│   └── PennTreeBank
+│       ├── ptb.test.txt
+│       ├── ptb.train.txt
+│       └── ptb.valid.txt
+├── functions.py
+├── main.py
+├── model.py
+├── reports
+│   └── test00
+│       ├── plot.png
+│       ├── ppl_plot.png
+│       ├── report.txt
+│       └── weights.pt
+└── utils.py
 ```
