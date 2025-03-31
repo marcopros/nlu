@@ -13,4 +13,36 @@
 ## Tasks
 
 ## Project Structure
-
+```
+nlu
+├── LM
+│   ├── part_A
+│   │   ├── README.md
+│   │   ├── dataset/
+│   │   ├── functions.py
+│   │   ├── main.py
+│   │   ├── model.py
+│   │   ├── reports/
+│   │   └── utils.py
+│   ├── part_B
+│   │   ├── dataset/
+│   │   ├── functions.py
+│   │   ├── main.py
+│   │   ├── model.py
+│   │   ├── reports/
+│   │   └── utils.py
+│   └── report_template/
+├── NLU
+│   ├── part_A
+│   │   ├── README.md
+│   │   ├── functions.py
+│   │   ├── main.py
+│   │   ├── model.py
+│   │   └── utils.py
+│   └── part_B
+│       ├── functions.py
+│       ├── main.py
+│       ├── model.py
+│       └── utils.py
+└── README.md
+```
