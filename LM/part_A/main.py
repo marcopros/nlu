@@ -35,16 +35,20 @@ if __name__ == "__main__":
     hid_size = 400
     emb_size = 400
 
-    lr = 0.0001 
+    lr = 5
     clip = 5 
 
     model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
     model.apply(init_weights)
     
-    
-    optimizer = optim.AdamW(model.parameters(), lr=lr)
+
+    # optimizer = optim.AdamW(model.parameters(), lr=lr)
+    # criterion_train = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"])
+    # criterion_eval = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"], reduction='sum')
+
+    optimizer = optim.SGD(model.parameters(), lr=lr)
     criterion_train = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"])
-    criterion_eval = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"], reduction='sum')
+    criterion_eval = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"], reduction='sum')       
 
     n_epochs = 100
     patience = 3
