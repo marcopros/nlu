@@ -35,7 +35,7 @@ if __name__ == "__main__":
     hid_size = 400
     emb_size = 400
 
-    lr = 0.0001
+    lr = 0.001
     clip = 5 
 
     model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
