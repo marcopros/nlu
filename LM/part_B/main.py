@@ -32,10 +32,10 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=32, collate_fn=partial(collate_fn, pad_token=lang.word2id["<pad>"]))
 
         
-    hid_size = 800
-    emb_size = 800 
+    hid_size = 400
+    emb_size = 400 
 
-    lr = 5 
+    lr = 2
     clip = 5 
 
     model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
