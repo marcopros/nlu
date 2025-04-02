@@ -116,6 +116,9 @@ def generate_training_report(epochs, total_epochs, learning_rate, hidden_layer_s
 # Function to create a new folder for saving reports with the next index
 def create_new_report_directory():
     base_directory = '/home/disi/nlu/LM/part_B/reports/test'
+    # Create folder reports if it does not exist
+    os.makedirs(os.path.dirname(base_directory), exist_ok=True)
+
     last_index = get_latest_index_in_directory(os.path.dirname(base_directory), os.path.basename(base_directory))
     new_foldername = f'{base_directory}{last_index + 1:02d}'
     os.mkdir(new_foldername)
