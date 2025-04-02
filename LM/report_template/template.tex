@@ -20,7 +20,7 @@
 %\textbf{If you did part A only, you have to just report the results in a table with a small description.}
 %
 \section{Introduction}
-The project aimed to improve the baseline RNN performance by incrementally adding 
+The first part of the project aimed to improve the baseline RNN performance by incrementally adding 
 features and dynamically adjusting hyperparameters (learning rate, hidden units,
 embedding size). The model was trained on the Penn Treebank dataset, using perplexity
 as the main evaluation metric. In the second part, advanced techniques \cite{merityRegOpt} were 
@@ -33,7 +33,7 @@ convergence while maintaining low perplexity (less than 250).
 \section{Implementation details}
 
 The first part of the project involved implementing a basic RNN model using PyTorch, 
-based on the code provided by the teaching assistant at the Lab Repository \cite{nlu-labs-unitn}.
+based on the code provided by the teaching assistant in the Lab Repository \cite{nlu-labs-unitn}.
  I started by integrating the functions, model, and dataset from the Jupyter notebook into my own 
  repository. Initially, the RNN model was trained on the Penn Treebank dataset, yielding a high 
  perplexity that did not meet the target of 250. To address this, I experimented with various 
@@ -62,9 +62,47 @@ switches to AvSGD when SGD converges to a steady-state distribution. The techniq
   strategy inspired by the official Salesforce Research repository \cite{salesforce-repo}.
 
 \section{Results}
-Add tables and explain how you evaluated your model. Tables and images of plots or confusion matrices do not count in the page limit.
-The results of my experiments are summarized in Table \ref{tab:results}. 
+The results of my experiments are summarized in Table \ref{tab:results}.
+
+In the first phase of the project, I started with a basic RNN model and experimented with different hyperparameters. After some tuning, the model achieved a perplexity of 173.22. Subsequently, I implemented several techniques that contributed to improved performance in each step. The validation perplexity is shown in Figure \ref{fig:plot}, which illustrates the results of the LSTM model with dropout layers and AdamW optimizer.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\linewidth]{images/part_A.png}
+\caption{Validation perplexity of the LSTM model with dropout layers and AdamW.}
+\label{fig:plot}
+\end{figure}
+
+In the second phase, I focused on implementing advanced optimization techniques, building upon
+ the best model from the previous step. This improved model achieved a perplexity of 90.56, with
+  a learning rate of 2, and both hidden and embedding units set to 400. One important observation
+   was that the performance of the model improved when using a learning rate scheduler that decreased
+    the learning rate over time, rather than relying on a fixed learning rate. Specifically, I used 
+    a StepLR scheduler with a step size of 5 and a gamma of 0.75.
+
+    Additionally, I observed that when AvSGD was triggered, the training loss increased 
+    temporarily. This behavior stems from the shift in optimization dynamics: when switching
+    
+    from standard SGD to AvSGD, the model begins averaging past parameter updates, which can 
+    disrupt the immediate optimization trajectory. While this averaging improves long-term 
+    stability and generalization, it may initially raise the training loss as the model adapts
+     to the new update regime.
+
+    Furthermore, the learning rate scheduler (StepLR) compounds this effect—when the learning 
+    rate is reduced, the model’s updates become more conservative, requiring additional steps 
+    to re-stabilize convergence. The temporary loss increase reflects this adjustment period, 
+    where the model transitions toward a flatter, and often more generalizable, minimum in the
+     loss landscape.
+
+     \begin{figure}[h!]
+      \centering
+      \includegraphics[width=0.8\linewidth]{images/part_A_avsdg.png}
+      \caption{Trigger point of AvSGD}
+      \label{fig:plot}
+      \end{figure}
 \newpage
+
+
 
 \begin{table}[h!]
   \centering
