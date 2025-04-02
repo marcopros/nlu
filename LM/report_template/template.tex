@@ -23,12 +23,13 @@
 The project aimed to improve the baseline RNN performance by incrementally adding 
 features and dynamically adjusting hyperparameters (learning rate, hidden units,
 embedding size). The model was trained on the Penn Treebank dataset, using perplexity
-as the main evaluation metric. In the second part, advanced techniques were 
+as the main evaluation metric. In the second part, advanced techniques \cite{merityRegOpt} were 
 incorporated to further enhance the language model, including Weight Tying 
 to reduce parameters, Variational Dropout (excluding DropConnect) for 
 regularization, and Averaged Stochastic Gradient Descent (AvSGD) for better
 optimization. These improvements aimed to enhance generalization and 
 convergence while maintaining low perplexity (less than 250). 
+
 \section{Implementation details (max approx. 200-300 words)}
 Do not explain the backbone deep neural network (e.g. RNN or BERT). Instead, focus on what you did on top of it. \textbf{Add references if you take inspiration from the code of others}
 
@@ -37,13 +38,18 @@ Add tables and explain how you evaluated your model. Tables and images of plots 
 \begin{table}[h!]
   \centering
   \begin{tabular}{lcccc}
-      \toprule
-      Model & PPL & LR & Hidden & Emb \\
       \midrule
+      \textbf{Model} & \textbf{PPL} & \textbf{LR} & \textbf{Hidden} & \textbf{Emb} \\
+      \midrule
+      \multicolumn{5}{c}{\textbf{Part A}} \\
       RNN                     & 173.22 & 0.1    & 100 & 100 \\
       LSTM                    & 137.31 & 2      & 300 & 300 \\
       LSTM + Var Dropout      & 123.14 & 2      & 300 & 300 \\
       LSTM + Var Dropout + AdamW & 109.43 & 0.001 & 400 & 400 \\
+      \midrule
+      \multicolumn{5}{c}{\textbf{Part B}} \\
+      \midrule
+      LSTM + Weight Tying + Var Dropout + AvSDG & 90.56 & 2 & 400 & 400 \\
       \bottomrule
   \end{tabular}
   \caption{Perplexity and hyperparameters of the models.}
@@ -54,6 +60,5 @@ Add tables and explain how you evaluated your model. Tables and images of plots 
 \bibliographystyle{IEEEtran}
 
 \bibliography{mybib}
-\cite{Rabiner89-ATO}
 
 \end{document}
