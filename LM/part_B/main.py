@@ -26,18 +26,19 @@ if __name__ == "__main__":
     dev_dataset = PennTreeBank(dev_raw, lang)
     test_dataset = PennTreeBank(test_raw, lang)
     
-    # create the dataloaders
+    # Initialize data loaders
     train_loader = DataLoader(train_dataset, batch_size=10, collate_fn=partial(collate_fn, pad_token=lang.word2id["<pad>"]),  shuffle=True)
     dev_loader = DataLoader(dev_dataset, batch_size=32, collate_fn=partial(collate_fn, pad_token=lang.word2id["<pad>"]))
     test_loader = DataLoader(test_dataset, batch_size=32, collate_fn=partial(collate_fn, pad_token=lang.word2id["<pad>"]))
 
-        
+    # Hyperparameters    
     hid_size = 400
     emb_size = 400 
 
     lr = 2
     clip = 5 
 
+    # Initialize the model and weights
     model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
     model.apply(init_weights)
 
@@ -59,6 +60,8 @@ if __name__ == "__main__":
     best_model = None
     pbar = tqdm(range(1,n_epochs))
 
+
+# Train loop
 if TRAIN:
     for epoch in pbar:
             loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    

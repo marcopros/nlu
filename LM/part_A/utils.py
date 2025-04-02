@@ -3,6 +3,7 @@ import torch.utils.data as data
 
 DEVICE = 'cuda:0'
 
+# Reads a text file and adds an end-of-sentence token to each line
 def read_file(path, eos_token="<eos>"):
     output = []
     with open(path, "r") as f:
@@ -10,7 +11,7 @@ def read_file(path, eos_token="<eos>"):
             output.append(line.strip() + " " + eos_token)
     return output
 
-# Vocab with tokens to ids
+# Creates a vocabulary from a corpus, mapping words to unique IDs
 def get_vocab(corpus, special_tokens=[]):
     output = {}
     i = 0 
@@ -24,11 +25,13 @@ def get_vocab(corpus, special_tokens=[]):
                 i += 1
     return output
 
-
+# Class to manage vocabulary and word-ID mappings
 class Lang():
     def __init__(self, corpus, special_tokens=[]):
         self.word2id = self.get_vocab(corpus, special_tokens)
-        self.id2word = {v:k for k, v in self.word2id.items()}
+        self.id2word = {v: k for k, v in self.word2id.items()}
+
+    # Creates the vocabulary from a corpus and special tokens
     def get_vocab(self, corpus, special_tokens=[]):
         output = {}
         i = 0 
@@ -41,31 +44,33 @@ class Lang():
                     output[w] = i
                     i += 1
         return output
-    
 
-class PennTreeBank (data.Dataset):
+# PyTorch dataset class for Penn TreeBank
+class PennTreeBank(data.Dataset):
     def __init__(self, corpus, lang):
         self.source = []
         self.target = []
-        
+
+        # Prepare (source, target) word pairs from sentences
         for sentence in corpus:
             self.source.append(sentence.split()[0:-1]) 
             self.target.append(sentence.split()[1:]) 
         
+        # Map word sequences to IDs
         self.source_ids = self.mapping_seq(self.source, lang)
         self.target_ids = self.mapping_seq(self.target, lang)
 
     def __len__(self):
         return len(self.source)
 
+    # Returns a sample with source and target sequences
     def __getitem__(self, idx):
-        src= torch.LongTensor(self.source_ids[idx])
+        src = torch.LongTensor(self.source_ids[idx])
         trg = torch.LongTensor(self.target_ids[idx])
         sample = {'source': src, 'target': trg}
         return sample
-    
-    # Auxiliary methods
-    
+
+    # Maps each word in the sequence to its ID
     def mapping_seq(self, data, lang): 
         res = []
         for seq in data:
@@ -74,41 +79,41 @@ class PennTreeBank (data.Dataset):
                 if x in lang.word2id:
                     tmp_seq.append(lang.word2id[x])
                 else:
-                    print('OOV found!')
+                    print('OOV found!')  # Out-of-vocabulary (OOV) word
                     print('You have to deal with that')
                     break
             res.append(tmp_seq)
         return res
-    
 
+# Collate function to batch and pad the sequences
 def collate_fn(data, pad_token):
     def merge(sequences):
         '''
-        merge from batch * sent_len to batch * max_len 
+        Merge from (batch * sentence_length) to (batch * max_length)
         '''
         lengths = [len(seq) for seq in sequences]
-        max_len = 1 if max(lengths)==0 else max(lengths)
-        # Pad token is zero in our case
-        # So we create a matrix full of PAD_TOKEN (i.e. 0) with the shape 
-        # batch_size X maximum length of a sequence
-        padded_seqs = torch.LongTensor(len(sequences),max_len).fill_(pad_token)
+        max_len = 1 if max(lengths) == 0 else max(lengths)
+
+        # Create a matrix filled with the PAD_TOKEN (0)
+        padded_seqs = torch.LongTensor(len(sequences), max_len).fill_(pad_token)
         for i, seq in enumerate(sequences):
             end = lengths[i]
-            padded_seqs[i, :end] = seq # We copy each sequence into the matrix
-        padded_seqs = padded_seqs.detach()  # We remove these tensors from the computational graph
+            padded_seqs[i, :end] = seq  # Copy each sequence into the matrix
+        padded_seqs = padded_seqs.detach()  # Detach tensors from the computation graph
         return padded_seqs, lengths
-    
-    # Sort data by seq lengths
 
-    data.sort(key=lambda x: len(x["source"]), reverse=True) 
+    # Sort data by sequence length in descending order
+    data.sort(key=lambda x: len(x["source"]), reverse=True)
     new_item = {}
     for key in data[0].keys():
         new_item[key] = [d[key] for d in data]
 
+    # Merge source and target sequences with padding
     source, _ = merge(new_item["source"])
     target, lengths = merge(new_item["target"])
     
+    # Move tensors to GPU
     new_item["source"] = source.to(DEVICE)
     new_item["target"] = target.to(DEVICE)
-    new_item["number_tokens"] = sum(lengths)
+    new_item["number_tokens"] = sum(lengths)  # Total number of tokens in the batch
     return new_item

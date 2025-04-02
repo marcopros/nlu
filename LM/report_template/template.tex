@@ -20,11 +20,15 @@
 %\textbf{If you did part A only, you have to just report the results in a table with a small description.}
 %
 \section{Introduction (approx. 100 words)}
-\begin{itemize}
-    \item \textit{a summary of what you have done}
-\end{itemize}
-For the first task of the project the goal was to enhance the performance of the baseline RNN by 
-adding incrementally some features.
+The project aimed to improve the baseline RNN performance by incrementally adding 
+features and dynamically adjusting hyperparameters (learning rate, hidden units,
+embedding size). The model was trained on the Penn Treebank dataset, using perplexity
+as the main evaluation metric. In the second part, advanced techniques were 
+incorporated to further enhance the language model, including Weight Tying 
+to reduce parameters, Variational Dropout (excluding DropConnect) for 
+regularization, and Averaged Stochastic Gradient Descent (AvSGD) for better
+optimization. These improvements aimed to enhance generalization and 
+convergence while maintaining low perplexity (less than 250). 
 \section{Implementation details (max approx. 200-300 words)}
 Do not explain the backbone deep neural network (e.g. RNN or BERT). Instead, focus on what you did on top of it. \textbf{Add references if you take inspiration from the code of others}
 

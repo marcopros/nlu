@@ -43,18 +43,6 @@ class LM_LSTM(nn.Module):
     A PyTorch class for a simple LSTM-based language model.
     """
     def __init__(self, emb_size, hidden_size, output_size, pad_index=0, out_dropout=0.3, emb_dropout=0.3, n_layers=1):
-        """
-        Initializes the components of the LSTM model.
-
-        Parameters:
-        emb_size (int): Size of the word embeddings.
-        hidden_size (int): Number of hidden units in the LSTM.
-        output_size (int): Size of the output (typically vocabulary size).
-        pad_index (int): Index of the padding token.
-        out_dropout (float): Dropout probability for the LSTM output.
-        emb_dropout (float): Dropout probability for the embedding layer.
-        n_layers (int): Number of layers in the LSTM (default is 1).
-        """
         super(LM_LSTM, self).__init__()
         
         # Embedding layer converts input tokens into vectors.
@@ -78,12 +66,6 @@ class LM_LSTM(nn.Module):
     def forward(self, input_sequence):
         """
         Defines the forward pass through the model.
-
-        Parameters:
-        input_sequence (Tensor): A batch of tokenized input sequences.
-
-        Returns:
-        output (Tensor): The final output from the linear layer, permuted for sequence tasks.
         """
         # Convert input tokens into embeddings.
         emb = self.embedding(input_sequence)

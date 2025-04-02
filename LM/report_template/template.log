@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  31 MAR 2025 20:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  2 APR 2025 10:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -219,19 +219,15 @@ LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 15
  (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 24.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
-LaTeX Font Info:    Trying to load font information for U+msa on input line 35.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 35.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (43.75981pt too wide) in paragraph at lines 35--45
+Overfull \hbox (39.25981pt too wide) in paragraph at lines 39--49
  [][] 
  []
 
@@ -251,15 +247,15 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 4324 strings out of 473201
- 69905 string characters out of 5716120
- 457681 words of memory out of 5000000
- 27521 multiletter control sequences out of 15000+600000
- 580860 words of font info for 81 fonts, out of 8000000 for 9000
+ 4296 strings out of 473201
+ 69448 string characters out of 5716120
+ 458681 words of memory out of 5000000
+ 27497 multiletter control sequences out of 15000+600000
+ 580546 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,9n,79p,613b,335s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,9n,79p,613b,366s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.pdf" (1 page, 54746 bytes).
+Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.pdf" (1 page, 54830 bytes).
 PDF statistics:
  29 PDF objects out of 1000 (max. 8388607)
  17 compressed objects within 1 object stream
