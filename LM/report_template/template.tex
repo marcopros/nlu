@@ -19,7 +19,7 @@
 %\\
 %\textbf{If you did part A only, you have to just report the results in a table with a small description.}
 %
-\section{Introduction (approx. 100 words)}
+\section{Introduction}
 The project aimed to improve the baseline RNN performance by incrementally adding 
 features and dynamically adjusting hyperparameters (learning rate, hidden units,
 embedding size). The model was trained on the Penn Treebank dataset, using perplexity
@@ -30,29 +30,60 @@ regularization, and Averaged Stochastic Gradient Descent (AvSGD) for better
 optimization. These improvements aimed to enhance generalization and 
 convergence while maintaining low perplexity (less than 250). 
 
-\section{Implementation details (max approx. 200-300 words)}
-Do not explain the backbone deep neural network (e.g. RNN or BERT). Instead, focus on what you did on top of it. \textbf{Add references if you take inspiration from the code of others}
+\section{Implementation details}
+
+The first part of the project involved implementing a basic RNN model using PyTorch, 
+based on the code provided by the teaching assistant at the Lab Repository \cite{nlu-labs-unitn}.
+ I started by integrating the functions, model, and dataset from the Jupyter notebook into my own 
+ repository. Initially, the RNN model was trained on the Penn Treebank dataset, yielding a high 
+ perplexity that did not meet the target of 250. To address this, I experimented with various 
+ hyperparameters, including the learning rate, hidden units, and embedding size, eventually 
+ achieving an acceptable perplexity. Subsequently, I developed an LSTM model, which significantly 
+ lowered the perplexity to 137.31. To further enhance performance, I incorporated two dropout layers,
+  resulting in better model accuracy. Additionally, the adoption of AdamW, a weight decay optimizer, 
+  further reduced the perplexity to 109.43. Given the consistent performance improvements, I retained
+   these regularization techniques for the second part of the project.
+
+
+In the second phase, I focused on implementing advanced techniques
+ to further optimize the language model. The first enhancement was Weight Tying,
+  which decreased the model’s parameter count and improved generalization. I also 
+  introduced Variational Dropout \cite{gal2016theoreticallygroundedapplicationdropout}, 
+  a method specifically designed for recurrent neural networks that applies a fixed dropout 
+  mask across the entire input sequence, enhancing temporal consistency and training stability.
+
+Finally, I employed the Non-monotonically triggered AvSGD \cite{merityRegOpt}, which 
+switches to AvSGD when SGD converges to a steady-state distribution. The technique can be
+ activated when model performance plateaus, as recommended by the authors: AvSGD is initiated 
+ when the validation metric does not improve over multiple cycles. A practical implementation 
+ involves using a patience mechanism similar to early stopping; once patience is exhausted, AvSGD
+  is triggered, and patience is reset to enable early termination. Alternatively, the switch 
+  can occur when validation loss exceeds the minimum observed within a non-monotonic window, a 
+  strategy inspired by the official Salesforce Research repository \cite{salesforce-repo}.
 
 \section{Results}
 Add tables and explain how you evaluated your model. Tables and images of plots or confusion matrices do not count in the page limit.
+The results of my experiments are summarized in Table \ref{tab:results}. 
+\newpage
+
 \begin{table}[h!]
   \centering
-  \begin{tabular}{lcccc}
+  \begin{tabular}{l p{1 cm} p{1 cm} p{1 cm} p{1 cm}}
       \midrule
       \textbf{Model} & \textbf{PPL} & \textbf{LR} & \textbf{Hidden} & \textbf{Emb} \\
       \midrule
       \multicolumn{5}{c}{\textbf{Part A}} \\
       RNN                     & 173.22 & 0.1    & 100 & 100 \\
       LSTM                    & 137.31 & 2      & 300 & 300 \\
-      LSTM + Var Dropout      & 123.14 & 2      & 300 & 300 \\
-      LSTM + Var Dropout + AdamW & 109.43 & 0.001 & 400 & 400 \\
+      LSTM + Dropout Layers      & 123.14 & 2      & 300 & 300 \\
+      LSTM + Dropout Layers + AdamW & 109.43 & 0.001 & 400 & 400 \\
       \midrule
       \multicolumn{5}{c}{\textbf{Part B}} \\
       \midrule
       LSTM + Weight Tying + Var Dropout + AvSDG & 90.56 & 2 & 400 & 400 \\
       \bottomrule
   \end{tabular}
-  \caption{Perplexity and hyperparameters of the models.}
+  \caption{Perplexity and hyperparameters of the best models.}
   \label{tab:results}
 \end{table}
 
