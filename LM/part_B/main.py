@@ -86,7 +86,7 @@ if TRAIN:
                     if loss_dev < best_loss:
                         best_loss = loss_dev
                     
-                    # check if not usign AvSDD, than check for non-monotonicity
+                    # check if not usign AvSGD, than check for non-monotonicity
                     if 't0' not in optimizer.param_groups[0] and (len(best_val_loss) > INTERVAL and loss_dev > min(best_val_loss[:-INTERVAL])):
                         print("Triggered, switching to ASGD")
                         optimizer = optim.ASGD(model.parameters(), lr=lr, t0=0,  lambd=0.)
