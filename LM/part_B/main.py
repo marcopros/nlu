@@ -60,7 +60,7 @@ if __name__ == "__main__":
     pbar = tqdm(range(1,n_epochs))
 
 
-# Train loop
+    # Train loop
     for epoch in pbar:
             loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    
             if epoch % 1 == 0:  # validate every epoch
