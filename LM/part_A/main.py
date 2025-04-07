@@ -31,8 +31,8 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=128, collate_fn=partial(collate_fn, pad_token=lang.word2id["<pad>"]))
 
     # Hyperparameters
-    hid_size = 400 # change
-    emb_size = 400 # change 
+    hid_size = 250 # change
+    emb_size = 300 # change 
 
     lr = 0.001
     clip = 5 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     best_model = None
     pbar = tqdm(range(1,n_epochs))
     
- # Train loop   
+    # Train loop   
     for epoch in pbar:
             loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    
             if epoch % 1 == 0:  # validate every epoch
