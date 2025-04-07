@@ -13,8 +13,6 @@ import numpy as np
 from model import *
 
 
-TRAIN = True # if True it will train the model from scratch
-
 if __name__ == "__main__":
     train_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.train.txt')
     dev_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.valid.txt')
@@ -61,7 +59,6 @@ if __name__ == "__main__":
     pbar = tqdm(range(1,n_epochs))
     
  # Train loop   
-if TRAIN:
     for epoch in pbar:
             loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    
             if epoch % 1 == 0:  # validate every epoch
