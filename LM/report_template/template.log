@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  7 APR 2025 12:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  7 APR 2025 12:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -177,11 +177,7 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count288
 \l__pdf_internal_box=\box54
-) (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.aux
-
-LaTeX Warning: Label `fig:plot' multiply defined.
-
-)
+) (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.aux)
 \openout1 = `template.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
@@ -232,12 +228,12 @@ Underfull \hbox (badness 2913) in paragraph at lines 55--63
 <images/part_A.png, id=1, 722.7pt x 433.62pt>
 File: images/part_A.png Graphic file (type png)
 <use images/part_A.png>
-Package pdftex.def Info: images/part_A.png  used on input line 71.
+Package pdftex.def Info: images/part_A.png  used on input line 74.
 (pdftex.def)             Requested size: 182.09831pt x 109.25826pt.
 <images/part_A_avsdg.png, id=3, 722.7pt x 433.62pt>
 File: images/part_A_avsdg.png Graphic file (type png)
 <use images/part_A_avsdg.png>
-Package pdftex.def Info: images/part_A_avsdg.png  used on input line 99.
+Package pdftex.def Info: images/part_A_avsdg.png  used on input line 102.
 (pdftex.def)             Requested size: 182.09831pt x 109.25826pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -249,15 +245,15 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
  </Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/images/part_A.png>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 109.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 112.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 109.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 112.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (120.7967pt too wide) in paragraph at lines 109--124
+Overfull \hbox (120.7967pt too wide) in paragraph at lines 112--127
  [][] 
  []
 
@@ -272,16 +268,12 @@ Overfull \hbox (120.7967pt too wide) in paragraph at lines 109--124
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-LaTeX Warning: There were multiply-defined labels.
-
  ) 
 Here is how much of TeX's memory you used:
- 4318 strings out of 473201
- 70007 string characters out of 5716120
+ 4319 strings out of 473201
+ 70023 string characters out of 5716120
  465681 words of memory out of 5000000
- 27519 multiletter control sequences out of 15000+600000
+ 27520 multiletter control sequences out of 15000+600000
  580546 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  72i,10n,79p,613b,344s stack positions out of 10000i,1000n,20000p,200000b,200000s
