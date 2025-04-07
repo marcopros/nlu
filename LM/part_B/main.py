@@ -13,7 +13,6 @@ from model import LM_LSTM
 
 
 INTERVAL = 3
-TRAIN = True
 
 if __name__ == "__main__":
     train_raw = read_file('LM/part_B/dataset/PennTreeBank/ptb.train.txt')
@@ -62,7 +61,6 @@ if __name__ == "__main__":
 
 
 # Train loop
-if TRAIN:
     for epoch in pbar:
             loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    
             if epoch % 1 == 0:  # validate every epoch
