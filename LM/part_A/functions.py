@@ -126,3 +126,5 @@ def create_new_report_directory():
     new_foldername = f'{base_directory}{last_index + 1:02d}'
     os.mkdir(new_foldername)
     return new_foldername
+
+    
