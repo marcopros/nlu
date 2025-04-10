@@ -12,7 +12,9 @@ from collections import Counter
 
 
 # If necessary, modify the path with the absolute path of the dataset
-path = '/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/part_A'
+# path = '/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/part_A'
+
+path = '/home/disi/nlu/NLU/part_A'
 PAD_TOKEN = 0
 
 if __name__ == "__main__":

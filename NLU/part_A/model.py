@@ -6,7 +6,7 @@ class ModelIAS(nn.Module):
     def __init__(self, hid_size, out_slot, out_int, emb_size, vocab_len, n_layer = 1, pad_index = 0):
         super(ModelIAS, self).__init__()
 
-        self.embedding = nn.Embdedding(vocab_len, emb_size, padding_idx = pad_index)
+        self.embedding = nn.Embedding(vocab_len, emb_size, padding_idx = pad_index)
 
         self.utt_encoder = nn.LSTM(emb_size, hid_size, n_layer, bidirectional = False, batch_first = True)
 
