@@ -1,0 +1,9 @@
+epochs used: 195 
+number epochs: 200 
+lr: 0.0001 
+hidden_size: 200 
+embedding_size: 300 
+model: <class 'model.ModelIAS'> 
+optimizer: <class 'torch.optim.adam.Adam'> 
+mean slot_f1: 0.921 variance 0.704
+mean intent_acc: 0.926 variance 0.753 

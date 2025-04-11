@@ -139,14 +139,37 @@ if __name__ == "__main__":
 
     folder_name = create_report_folder()
     generate_plots(sampled_epochs, losses_train, losses_dev, os.path.join(folder_name,"plot.png"))
-    PATH = os.path.join("bin", "weights_1.pt")
-    saving_object = {"epoch": x, 
-                        "model": model.state_dict(), 
-                        "optimizer": optimizer.state_dict(), 
-                        "w2id": lang.word2id, 
-                        "slot2id": lang.slot2id, 
-                        "intent2id": lang.intent2id}
+
+    # Assicurati che la directory 'bin' esista
+    bin_path = os.path.join(path, "bin")
+    os.makedirs(bin_path, exist_ok=True)
+    
+    PATH = os.path.join(bin_path, "weights_1.pt")
+    saving_object = {
+        "epoch": x, 
+        "model": model.state_dict(), 
+        "optimizer": optimizer.state_dict(), 
+        "w2id": lang.word2id, 
+        "slot2id": lang.slot2id, 
+        "intent2id": lang.intent2id
+    }
     torch.save(saving_object, PATH)
+
+    # Assicurati che la directory 'report' esista
+    report_bin_path = os.path.join(folder_name, "bin")
+    os.makedirs(report_bin_path, exist_ok=True)
+
+    PATH = os.path.join(report_bin_path, "weights_1.pt")
+    saving_object = {
+        "epoch": x, 
+        "model": model.state_dict(), 
+        "optimizer": optimizer.state_dict(), 
+        "w2id": lang.word2id, 
+        "slot2id": lang.slot2id, 
+        "intent2id": lang.intent2id
+    }
+    torch.save(saving_object, PATH)
+
     generate_report(
         epochs=sampled_epochs[-1], 
         number_epochs=n_epochs, 
