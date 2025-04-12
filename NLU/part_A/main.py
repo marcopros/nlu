@@ -105,7 +105,7 @@ if __name__ == "__main__":
     criterion_intents = nn.CrossEntropyLoss() # Because we do not have the pad token
 
     # Train Loop
-    n_epochs = 200
+    n_epochs = 100
     patience = 3
     losses_train = []
     losses_dev = []
@@ -141,24 +141,25 @@ if __name__ == "__main__":
     generate_plots(sampled_epochs, losses_train, losses_dev, os.path.join(folder_name,"plot.png"))
 
     # Assicurati che la directory 'bin' esista
-    bin_path = os.path.join(path, "bin")
-    os.makedirs(bin_path, exist_ok=True)
+    # bin_path = os.path.join(path, "bin")
+    # os.makedirs(bin_path, exist_ok=True)
     
-    PATH = os.path.join(bin_path, "weights_1.pt")
-    saving_object = {
-        "epoch": x, 
-        "model": model.state_dict(), 
-        "optimizer": optimizer.state_dict(), 
-        "w2id": lang.word2id, 
-        "slot2id": lang.slot2id, 
-        "intent2id": lang.intent2id
-    }
-    torch.save(saving_object, PATH)
+    # PATH = os.path.join(bin_path, "weights_1.pt")
+    # saving_object = {
+    #     "epoch": x, 
+    #     "model": model.state_dict(), 
+    #     "optimizer": optimizer.state_dict(), 
+    #     "w2id": lang.word2id, 
+    #     "slot2id": lang.slot2id, 
+    #     "intent2id": lang.intent2id
+    # }
+    # torch.save(saving_object, PATH)
 
-    # Assicurati che la directory 'report' esista
+    # Assicurati che la directory 'report/bin' esista
     report_bin_path = os.path.join(folder_name, "bin")
     os.makedirs(report_bin_path, exist_ok=True)
 
+    # Salva il modello nella directory 'report/bin'
     PATH = os.path.join(report_bin_path, "weights_1.pt")
     saving_object = {
         "epoch": x, 
