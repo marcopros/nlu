@@ -7,3 +7,5 @@ model: <class 'model.ModelIAS'>
 optimizer: <class 'torch.optim.adam.Adam'> 
 mean slot_f1: 0.921 variance 0.704
 mean intent_acc: 0.926 variance 0.753 
+
+## Single Run !!! - Base IAS
