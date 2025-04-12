@@ -105,7 +105,7 @@ if __name__ == "__main__":
     criterion_intents = nn.CrossEntropyLoss() # Because we do not have the pad token
 
     # Train Loop
-    n_epochs = 100
+    n_epochs = 50
     patience = 3
     losses_train = []
     losses_dev = []
