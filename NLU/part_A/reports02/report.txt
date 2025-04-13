@@ -1,0 +1,11 @@
+epochs used: 135 
+number epochs: 200 
+lr: 0.0001 
+hidden_size: 200 
+embedding_size: 300 
+model: <class 'model.ModelIAS'> 
+optimizer: <class 'torch.optim.adam.Adam'> 
+mean slot_f1: 0.928 variance 0.541
+mean intent_acc: 0.936 variance 0.589 
+
+## Multiple Runs (5) - AIS with Bidirectionality
