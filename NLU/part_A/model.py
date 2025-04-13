@@ -8,26 +8,37 @@ class ModelIAS(nn.Module):
 
         self.embedding = nn.Embedding(vocab_len, emb_size, padding_idx = pad_index)
 
-        self.utt_encoder = nn.LSTM(emb_size, hid_size, n_layer, bidirectional = False, batch_first = True)
+        self.utt_encoder = nn.LSTM(emb_size, hid_size, n_layer, bidirectional = True, batch_first = True)
 
-        self.slot_out = nn.Linear(hid_size, out_slot)
+        self.slot_out = nn.Linear(hid_size * 2, out_slot)
         
-        self.intent_out = nn.Linear(hid_size, out_int)
+        self.intent_out = nn.Linear(hid_size * 2, out_int)
 
         self.dropout = nn.Dropout(0.1)
 
-    def forward(self, utterance, seq_lenghts):
+    def forward(self, utterance, seq_lengths):
         utter_emb = self.embedding(utterance)
-        packed_input = pack_padded_sequence(utter_emb, seq_lenghts.cpu().numpy(), batch_first = True)
+        
+        # Pack the input for efficient LSTM processing
+        packed_input = pack_padded_sequence(utter_emb, seq_lengths.cpu(), batch_first=True, enforce_sorted=False)
         packed_output, (last_hidden, cell) = self.utt_encoder(packed_input)
 
-        # Unpack the sequence
-        utt_encoded, input_sizes = pad_packed_sequence(packed_output, batch_first = True)
-        last_hidden = last_hidden[-1,:,:]
+        # Unpack output
+        utt_encoded, _ = pad_packed_sequence(packed_output, batch_first=True)
 
-        # Compute slot logits
+        # Concatenate final forward and backward hidden states for intent classification
+        if self.utt_encoder.bidirectional:
+            last_hidden_cat = torch.cat((last_hidden[-2], last_hidden[-1]), dim=1)
+        else:
+            last_hidden_cat = last_hidden[-1]
+
+        # Slot logits: shape [batch, seq_len, out_slot]
         slots = self.slot_out(utt_encoded)
-        intent = self.intent_out(last_hidden)
 
-        slots = slots.permute(0,2,1)
+        # Intent logits: shape [batch, out_int]
+        intent = self.intent_out(last_hidden_cat)
+
+        # Rearrange for loss computation (e.g., for CrossEntropy over time steps)
+        slots = slots.permute(0, 2, 1)
+
         return slots, intent
