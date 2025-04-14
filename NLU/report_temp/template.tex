@@ -1,0 +1,48 @@
+\documentclass[a4paper]{article}
+
+\usepackage{INTERSPEECH2021}
+
+% Put the lab number of the corresponding exercise
+\title{Slot filling and Intent classification  - Lab 5}
+\name{Marco Prosperi (257857)}
+
+\address{
+  University of Trento}
+\email{marco.prosperi@studenti.unitn.it}
+
+\begin{document}
+
+\maketitle
+%
+%Dear students, \\
+%here you can find a complete description of the sections that you need to write for the mini-report. You have to write a mini-report of \textbf{max 1 page (references, tables and images are excluded from the count)} for each last exercise of labs 4 (LM) and 5 (NLU). \textbf{Reports longer than 1 page will not be checked.} The purpose of this is to give you a way to report cleanly the results and give you space to describe what you have done and/or the originality that you have added to the exercise.
+%\\
+%\textbf{If you did part A only, you have to just report the results in a table with a small description.}
+%
+\section{Introduction}
+The first part of the NLU project involved enhancing the AIS model for intent 
+classification and slot filling on the ATIS dataset \cite{nlu-labs-unitn}, evaluated using F1-score and
+ accuracy. Two key features were added: a BiLSTM layer, which processes input 
+ sequences bidirectionally to better capture contextual information, and dropout 
+ layers to prevent overfitting by randomly deactivating neurons during training.
+ These changes aimed to improve the model’s generalization on unseen data. In the 
+ second part, the LSTM architecture was replaced with a BERT-based model. This 
+ involved fine-tuning and handling sub-tokenization, leveraging BERT’s contextual
+ embeddings to boost performance in both tasks.
+\section{Implementation details}
+For the first part of the project, I've added incremental changes to the base AIS model.
+First, I added a bidirectional layer to the LSTM architecture, allowing the model to
+process the input sequence in both forward and backward directions. 
+This change was implemented by setting the bidirectional parameter to True in the LSTM layer and by multiplying the output
+ by 2 because it concatenates the forward and backward outputs.
+
+The second change was the addition of dropout layers that further improved the model's performance.
+
+\section{Results}
+
+prova prova
+\bibliographystyle{IEEEtran}
+
+\bibliography{mybib}
+
+\end{document}

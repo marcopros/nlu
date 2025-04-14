@@ -25,17 +25,4 @@
 UniTrento, ``Natural language understanding labs,'' 2025. [Online]. Available: \url{https://github.com/BrownFortress/NLU-2025-Labs/tree/main}
 \BIBentrySTDinterwordspacing
 
-\bibitem{gal2016theoreticallygroundedapplicationdropout}
-\BIBentryALTinterwordspacing
-Y.~Gal and Z.~Ghahramani, ``A theoretically grounded application of dropout in recurrent neural networks,'' 2016. [Online]. Available: \url{https://arxiv.org/abs/1512.05287}
-\BIBentrySTDinterwordspacing
-
-\bibitem{merityRegOpt}
-S.~Merity, N.~S. Keskar, and R.~Socher, ``{Regularizing and Optimizing LSTM Language Models},'' \emph{arXiv preprint arXiv:1708.02182}, 2017.
-
-\bibitem{salesforce-repo}
-\BIBentryALTinterwordspacing
-SalesforceResearch, ``Salesforce lstm reasearch repository,'' 2018. [Online]. Available: \url{https://github.com/salesforce/awd-lstm-lm}
-\BIBentrySTDinterwordspacing
-
 \end{thebibliography}

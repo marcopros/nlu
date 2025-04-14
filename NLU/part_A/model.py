@@ -18,6 +18,7 @@ class ModelIAS(nn.Module):
 
     def forward(self, utterance, seq_lengths):
         utter_emb = self.embedding(utterance)
+        utter_emb = self.dropout(utter_emb)
         
         # Pack the input for efficient LSTM processing
         packed_input = pack_padded_sequence(utter_emb, seq_lengths.cpu(), batch_first=True, enforce_sorted=False)
@@ -25,10 +26,12 @@ class ModelIAS(nn.Module):
 
         # Unpack output
         utt_encoded, _ = pad_packed_sequence(packed_output, batch_first=True)
+        utt_encoded = self.dropout(utt_encoded)
 
         # Concatenate final forward and backward hidden states for intent classification
         if self.utt_encoder.bidirectional:
             last_hidden_cat = torch.cat((last_hidden[-2], last_hidden[-1]), dim=1)
+            last_hidden_cat = self.dropout(last_hidden_cat)
         else:
             last_hidden_cat = last_hidden[-1]
 

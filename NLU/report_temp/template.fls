@@ -1,16 +1,16 @@
-PWD /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template
+PWD /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp
 INPUT /usr/local/texlive/2024/texmf.cnf
 INPUT /usr/local/texlive/2024/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.tex
-OUTPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.log
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.tex
+OUTPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.log
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/base/size10.clo
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/base/size10.clo
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/base/size10.clo
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/INTERSPEECH2021.sty
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/INTERSPEECH2021.sty
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/INTERSPEECH2021.sty
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/INTERSPEECH2021.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/graphics/keyval.sty
@@ -57,10 +57,10 @@ INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.aux
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.aux
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.aux
-OUTPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.aux
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.aux
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.aux
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.aux
+OUTPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.aux
 INPUT /usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -78,18 +78,11 @@ INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A.png
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A.png
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A.png
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A.png
-OUTPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.pdf
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A.png
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A_avsdg.png
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A_avsdg.png
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A_avsdg.png
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A_avsdg.png
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A_avsdg.png
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.bbl
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.bbl
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.bbl
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
+OUTPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.pdf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
 INPUT /usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map
@@ -104,49 +97,9 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmr6.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex9.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
-INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
-INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
-INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
-INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib9.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib6.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib5.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy9.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.bbl
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.bbl
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.bbl
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr7t.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmri7t.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmb7t.vf
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmr7t.vf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/vf/adobe/times/ptmri7t.vf
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/times/ptmri8r.tfm
-INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.aux
+INPUT /Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.aux
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb

@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  14 APR 2025 09:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  14 APR 2025 12:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.tex"
-(/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.tex
+**"/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.tex"
+(/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2024/texmf-dist/tex/latex/base/article.cls
@@ -23,7 +23,7 @@ File: size10.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 \bibindent=\dimen141
-) (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/INTERSPEECH2021.sty
+) (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/INTERSPEECH2021.sty
 Package: INTERSPEECH2021 2021/01/22 Official Interspeech 2021 package
  (/usr/local/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
@@ -177,7 +177,7 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count288
 \l__pdf_internal_box=\box54
-) (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.aux)
+) (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.aux)
 \openout1 = `template.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
@@ -218,28 +218,7 @@ Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 15.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-Underfull \hbox (badness 2913) in paragraph at lines 55--63
-[]\OT1/ptm/m/n/9 Finally, I em-ployed the Non-monotonically trig-gered
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-<images/part_A.png, id=1, 722.7pt x 433.62pt>
-File: images/part_A.png Graphic file (type png)
-<use images/part_A.png>
-Package pdftex.def Info: images/part_A.png  used on input line 74.
-(pdftex.def)             Requested size: 182.09831pt x 109.25826pt.
-<images/part_A_avsdg.png, id=3, 722.7pt x 433.62pt>
-File: images/part_A_avsdg.png Graphic file (type png)
-<use images/part_A_avsdg.png>
-Package pdftex.def Info: images/part_A_avsdg.png  used on input line 102.
-(pdftex.def)             Requested size: 182.09831pt x 109.25826pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+) (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.bbl)
 
 
 
@@ -247,44 +226,26 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 
- </Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A.png>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 112.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 112.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Overfull \hbox (120.7967pt too wide) in paragraph at lines 112--127
- [][] 
- []
 
-(/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.bbl)
-
-
-
-[2
-
- </Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/images/part_A_avsdg.png>] (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.aux)
+] (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 4319 strings out of 473201
- 70036 string characters out of 5716120
- 465681 words of memory out of 5000000
- 27520 multiletter control sequences out of 15000+600000
- 580546 words of font info for 80 fonts, out of 8000000 for 9000
+ 4217 strings out of 473201
+ 68268 string characters out of 5716120
+ 455681 words of memory out of 5000000
+ 27449 multiletter control sequences out of 15000+600000
+ 569861 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,10n,79p,614b,344s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,5n,79p,610b,262s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_template/template.pdf" (2 pages, 121788 bytes).
+Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/NLU/report_temp/template.pdf" (1 page, 49315 bytes).
 PDF statistics:
- 37 PDF objects out of 1000 (max. 8388607)
- 20 compressed objects within 1 object stream
+ 29 PDF objects out of 1000 (max. 8388607)
+ 17 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
