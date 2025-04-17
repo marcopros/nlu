@@ -7,3 +7,5 @@ model: <class 'model.ModelIAS'>
 optimizer: <class 'torch.optim.adam.Adam'> 
 mean slot_f1: 0.94 variance 0.519
 mean intent_acc: 0.941 variance 0.562 
+
+## Multiple runs, AIS Model with Bidirectionality and dropout
