@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from collections import Counter
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-bert_model_name = "bert-base-uncased"
+bert_model_name = "bert-large-uncased"
 
 path = '/home/disi/nlu/NLU/part_B'
 PAD_TOKEN = 0
