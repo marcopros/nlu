@@ -148,7 +148,7 @@ def generate_report(epochs, number_epochs, lr, hidden_size, emb_size, model, opt
 
 # Create a new folder for the report
 def create_report_folder():
-    base_path = "/home/disi/nlu/NLU/part_A/reports"
+    base_path = "/home/disi/nlu/NLU/part_B/reports"
     last_index = get_last_index(os.path.dirname(base_path), os.path.basename(base_path))
     foldername = f"{base_path}{last_index + 1:02d}"
     os.mkdir(foldername)

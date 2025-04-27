@@ -4,12 +4,49 @@ import torch.utils.data as data
 import json
 from pprint import pprint
 from collections import Counter
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset
 from transformers import BertTokenizer
 
 device = 'cuda:0'
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 PAD_TOKEN = 0
+
+class ATISDataset(Dataset):
+    def __init__(self, data, tokenizer, slot2id, intent2id, max_len=64):
+        self.data = data
+        self.tokenizer = tokenizer
+        self.slot2id = slot2id
+        self.intent2id = intent2id
+        self.max_len = max_len
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        item = self.data[idx]
+        tokens = item['utterance'].split()
+        slots = item['slots'].split()
+        intent = item['intent']
+        encoding = self.tokenizer(tokens, is_split_into_words=True, truncation=True, max_length=self.max_len, return_tensors="pt", padding='max_length')
+        word_ids = encoding.word_ids(batch_index=0)
+        slot_labels = []
+        prev_word = None
+        for word_id in word_ids:
+            if word_id is None:
+                slot_labels.append(-100)
+            elif word_id != prev_word:
+                slot_labels.append(self.slot2id[slots[word_id]])
+            else:
+                slot_labels.append(-100)  # ignore sub-tokens for slot loss
+            prev_word = word_id
+        return {
+            "input_ids": encoding["input_ids"].squeeze(0),
+            "attention_mask": encoding["attention_mask"].squeeze(0),
+            "token_type_ids": encoding["token_type_ids"].squeeze(0),
+            "slot_labels": torch.tensor(slot_labels),
+            "intent_label": torch.tensor(self.intent2id[intent])
+        }
+
 
 def load_data(path):
     '''
