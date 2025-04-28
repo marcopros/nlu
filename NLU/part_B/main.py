@@ -131,10 +131,10 @@ if __name__ == "__main__":
             if slot_f1 > best_f1:
                 best_f1 = slot_f1
                 patience = 3
-                # Save best model in NLU/part_B/reports/bin
-                reports_dir = os.path.join(path, "reports", "bin")
-                os.makedirs(reports_dir, exist_ok=True)
-                PATH = os.path.join(reports_dir, f"weights_{run+1}.pt")
+                # Save best model in a unique folder for each run
+                run_dir = os.path.join(path, f"run{run+1}", f"bin{run+1}")
+                os.makedirs(run_dir, exist_ok=True)
+                PATH = os.path.join(run_dir, "weights.pt")
                 torch.save(model.state_dict(), PATH)
             else:
                 patience -= 1
