@@ -83,7 +83,7 @@ if __name__ == "__main__":
     test_dataset = ATISDataset(test_raw, tokenizer, slot2id, intent2id)
 
     # Create DataLoader for batching and shuffling
-    train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+    train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True) 
     dev_loader = DataLoader(dev_dataset, batch_size=32)
     test_loader = DataLoader(test_dataset, batch_size=32)
 
