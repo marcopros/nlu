@@ -1,0 +1,5 @@
+Model --> bert-base-uncased, 64 - 32 - 32 batch sizes (train, test, val)
+
+Metrics :
+Slot F1 0.927 +- 0.003
+Intent Acc 0.971 +- 0.001

@@ -1,3 +1,4 @@
+# Import necessary libraries
 from transformers import BertTokenizerFast, BertConfig, AdamW
 from model import JointBERT
 from torch.utils.data import DataLoader, Dataset
@@ -12,9 +13,11 @@ from utils import *
 from sklearn.model_selection import train_test_split
 from collections import Counter
 
+# Set device and model name
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-bert_model_name = "bert-large-uncased"
+bert_model_name = "bert-large-uncased" # or "bert-base-uncased"
 
+# Define and if necessary create the path to the dataset
 path = '/home/disi/nlu/NLU/part_B'
 PAD_TOKEN = 0
 
@@ -27,6 +30,7 @@ if __name__ == "__main__":
     print('Train samples:' , len(tmp_train_raw))
     print('Test samples: ', len(test_raw))
 
+
     portion = 0.10
     intents = [x['intent'] for x in tmp_train_raw]
     count_y = Counter(intents)
@@ -35,6 +39,7 @@ if __name__ == "__main__":
     inputs = []
     mini_train = []
 
+    # Rare intent samples
     for id_y, y in enumerate(intents):
         if count_y[y] > 1:
             inputs.append(tmp_train_raw[id_y])
@@ -48,49 +53,64 @@ if __name__ == "__main__":
                                                       shuffle=True,
                                                       stratify=labels)
     
+    # Add rare intent samples to training set
     X_train.extend(mini_train)
     train_raw = X_train
     dev_raw = X_dev
 
     y_test = [x['intent'] for x in test_raw]
 
+
     words = sum([x['utterance'].split() for x in train_raw], [])
+    # Combine all data splits to extract unique slots and intents
     corpus = train_raw + dev_raw + test_raw
 
+    # Extract unique slots and intents
     slots = set(sum([line['slots'].split() for line in corpus], []))
     intents = set([line['intent'] for line in corpus])
 
+
+    # Load BERT tokenizer and create slot and intent mappings (also reverse)
     tokenizer = BertTokenizerFast.from_pretrained(bert_model_name)
     slot2id = {slot: i for i, slot in enumerate(sorted(slots))}
     intent2id = {intent: i for i, intent in enumerate(sorted(intents))}
     id2slot = {i: slot for slot, i in slot2id.items()}
     id2intent = {i: intent for intent, i in intent2id.items()}
 
+    # Create BERT-compatible dataset for train, dev and test
     train_dataset = ATISDataset(train_raw, tokenizer, slot2id, intent2id)
     dev_dataset = ATISDataset(dev_raw, tokenizer, slot2id, intent2id)
     test_dataset = ATISDataset(test_raw, tokenizer, slot2id, intent2id)
 
-    train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
+    # Create DataLoader for batching and shuffling
+    train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
     dev_loader = DataLoader(dev_dataset, batch_size=32)
     test_loader = DataLoader(test_dataset, batch_size=32)
 
     n_epochs = 10
     runs = 3
 
-    slot_f1s, intent_accs = [], []
+    slot_f1s, intent_accs = [], [] # Lists to store results for each run
 
+    # Repeat training and testing for the specified number of runs
     for run in tqdm(range(runs)):
         config = BertConfig.from_pretrained(bert_model_name)
+
+        # Initialize JointBERT model with pre-trained weights
         model = JointBERT.from_pretrained(bert_model_name, config=config, num_intents=len(intent2id), num_slots=len(slot2id)).to(device)
-        optimizer = AdamW(model.parameters(), lr=2e-5)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5) # Optimizer (AdamW)
         best_f1 = 0
-        patience = 3
+        patience = 3 # Early stopping patience
 
         for epoch in range(n_epochs):
             model.train()
             for batch in train_loader:
                 optimizer.zero_grad()
+
+                # Move batch to device (GPU in our case)
                 batch = {k: v.to(device) for k, v in batch.items()}
+
+                # Forward pass (compute loss and logits)
                 loss, _, _ = model(
                     input_ids=batch["input_ids"],
                     attention_mask=batch["attention_mask"],
@@ -98,8 +118,8 @@ if __name__ == "__main__":
                     slot_labels=batch["slot_labels"],
                     intent_label=batch["intent_label"]
                 )
-                loss.backward()
-                optimizer.step()
+                loss.backward()  # Backpropagation
+                optimizer.step() # Update model parameters
 
             # Validation
             model.eval()
@@ -108,11 +128,13 @@ if __name__ == "__main__":
             with torch.no_grad():
                 for batch in dev_loader:
                     batch = {k: v.to(device) for k, v in batch.items()}
+                    # Forward pass (compute logits no loss)
                     _, intent_logits, slot_logits = model(
                         input_ids=batch["input_ids"],
                         attention_mask=batch["attention_mask"],
                         token_type_ids=batch["token_type_ids"]
                     )
+                    # Compute predictions
                     intent_preds = intent_logits.argmax(dim=1).cpu().numpy()
                     all_intents.extend(batch["intent_label"].cpu().numpy())
                     all_intent_preds.extend(intent_preds)
@@ -126,8 +148,11 @@ if __name__ == "__main__":
                                 pred.append(id2slot[slot_logits[i][j].argmax().item()])
                         all_slots.append(true)
                         all_slot_preds.append(pred)
+            # Compute accuracy and F1 score
             intent_acc = accuracy_score(all_intents, all_intent_preds)
             slot_f1 = seqeval_f1(all_slots, all_slot_preds)
+
+            # Early stopping and model saving
             if slot_f1 > best_f1:
                 best_f1 = slot_f1
                 patience = 3
@@ -139,34 +164,45 @@ if __name__ == "__main__":
             else:
                 patience -= 1
             if patience == 0:
-                break
+                break # Stop training if no improvement
 
-        # Test
-        model.eval()
-        all_intents, all_intent_preds = [], []
-        all_slots, all_slot_preds = [], []
-        with torch.no_grad():
+        # Testing on the test set
+        model.eval()  # Set model to evaluation mode
+        all_intents, all_intent_preds = [], []  # Lists to store true and predicted intents
+        all_slots, all_slot_preds = [], []      # Lists to store true and predicted slot sequences
+
+        with torch.no_grad():  # Disable gradient computation for evaluation
             for batch in test_loader:
+                # Move all batch tensors to the correct device (CPU/GPU)
                 batch = {k: v.to(device) for k, v in batch.items()}
+                # Forward pass through the model (no labels, so no loss is returned)
                 _, intent_logits, slot_logits = model(
                     input_ids=batch["input_ids"],
                     attention_mask=batch["attention_mask"],
                     token_type_ids=batch["token_type_ids"]
                 )
+                # Get predicted intent indices for each sample in the batch
                 intent_preds = intent_logits.argmax(dim=1).cpu().numpy()
+                # Store true and predicted intents
                 all_intents.extend(batch["intent_label"].cpu().numpy())
                 all_intent_preds.extend(intent_preds)
+                # For each sample in the batch, process slot predictions
                 for i, slot_label in enumerate(batch["slot_labels"]):
-                    true = []
-                    pred = []
+                    true = []  # True slot labels for this sample
+                    pred = []  # Predicted slot labels for this sample
                     for j, label_id in enumerate(slot_label.cpu().numpy()):
-                        if label_id != -100:
-                            true.append(id2slot[label_id])
+                        if label_id != -100:  # Ignore special tokens ([CLS], [SEP], padding)
+                            true.append(id2slot[label_id])  # Convert true label index to string
+                            
+                            # Get predicted slot index for this token and convert to string
                             pred.append(id2slot[slot_logits[i][j].argmax().item()])
                     all_slots.append(true)
                     all_slot_preds.append(pred)
-        intent_accs.append(accuracy_score(all_intents, all_intent_preds))
-        slot_f1s.append(seqeval_f1(all_slots, all_slot_preds))
 
+        # Compute and store metrics for this run
+        intent_accs.append(accuracy_score(all_intents, all_intent_preds))  # Intent classification accuracy
+        slot_f1s.append(seqeval_f1(all_slots, all_slot_preds))             # Slot filling F1 score (seqeval)
+
+    # After all runs, print the average and standard deviation of the metrics
     print('Slot F1', round(np.mean(slot_f1s), 3), '+-', round(np.std(slot_f1s), 3))
     print('Intent Acc', round(np.mean(intent_accs), 3), '+-', round(np.std(intent_accs), 3))
