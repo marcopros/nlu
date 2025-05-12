@@ -22,45 +22,17 @@ path = '/home/disi/nlu/NLU/part_B'
 
 
 if __name__ == "__main__":
-    tmp_train_raw = load_data(os.path.join(path, 'dataset', 'train.json'))
+    train_raw, dev_raw = load_and_split_data(
+        os.path.join(path, 'dataset', 'train.json'),
+        portion=0.10, 
+        random_state=42
+    )
     test_raw = load_data(os.path.join(path, 'dataset', 'test.json'))
 
     # Print dataset sizes
-    print('Train samples:' , len(tmp_train_raw))
+    print('Train samples:' , len(train_raw))
     print('Test samples: ', len(test_raw))
-
-
-    portion = 0.10
-    intents = [x['intent'] for x in tmp_train_raw]
-    count_y = Counter(intents)
-
-    labels = []
-    inputs = []
-    mini_train = []
-
-    # Rare intent samples
-    for id_y, y in enumerate(intents):
-        if count_y[y] > 1:
-            inputs.append(tmp_train_raw[id_y])
-            labels.append(y)
-        else:
-            mini_train.append(tmp_train_raw[id_y])
-
-    # Random stratify
-    X_train, X_dev, y_train, y_dev = train_test_split(inputs, labels, test_size=portion, 
-                                                      random_state=42,
-                                                      shuffle=True,
-                                                      stratify=labels)
     
-    # Add rare intent samples to training set
-    X_train.extend(mini_train)
-    train_raw = X_train
-    dev_raw = X_dev
-
-    y_test = [x['intent'] for x in test_raw]
-
-
-    words = sum([x['utterance'].split() for x in train_raw], [])
     # Combine all data splits to extract unique slots and intents
     corpus = train_raw + dev_raw + test_raw
 
@@ -89,118 +61,20 @@ if __name__ == "__main__":
     n_epochs = 10
     runs = 3
 
-    slot_f1s, intent_accs = [], [] # Lists to store results for each run
-
-    # Repeat training and testing for the specified number of runs
-    for run in tqdm(range(runs)):
-        config = BertConfig.from_pretrained(bert_model_name)
-
-        # Initialize JointBERT model with pre-trained weights
-        model = JointBERT.from_pretrained(bert_model_name, config=config, num_intents=len(intent2id), num_slots=len(slot2id)).to(device)
-        optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5) # Optimizer (AdamW)
-        best_f1 = 0
-        patience = 3 # Early stopping patience
-
-        for epoch in range(n_epochs):
-            model.train()
-            for batch in train_loader:
-                optimizer.zero_grad()
-
-                # Move batch to device (GPU in our case)
-                batch = {k: v.to(device) for k, v in batch.items()}
-
-                # Forward pass (compute loss and logits)
-                loss, _, _ = model(
-                    input_ids=batch["input_ids"],
-                    attention_mask=batch["attention_mask"],
-                    token_type_ids=batch["token_type_ids"],
-                    slot_labels=batch["slot_labels"],
-                    intent_label=batch["intent_label"]
-                )
-                loss.backward()  # Backpropagation
-                optimizer.step() # Update model parameters
-
-            # Validation
-            model.eval()
-            all_intents, all_intent_preds = [], []
-            all_slots, all_slot_preds = [], []
-            with torch.no_grad():
-                for batch in dev_loader:
-                    batch = {k: v.to(device) for k, v in batch.items()}
-                    # Forward pass (compute logits no loss)
-                    _, intent_logits, slot_logits = model(
-                        input_ids=batch["input_ids"],
-                        attention_mask=batch["attention_mask"],
-                        token_type_ids=batch["token_type_ids"]
-                    )
-                    # Compute predictions
-                    intent_preds = intent_logits.argmax(dim=1).cpu().numpy()
-                    all_intents.extend(batch["intent_label"].cpu().numpy())
-                    all_intent_preds.extend(intent_preds)
-
-                    for i, slot_label in enumerate(batch["slot_labels"]):
-                        true = []
-                        pred = []
-                        for j, label_id in enumerate(slot_label.cpu().numpy()):
-                            if label_id != -100:
-                                true.append(id2slot[label_id])
-                                pred.append(id2slot[slot_logits[i][j].argmax().item()])
-                        all_slots.append(true)
-                        all_slot_preds.append(pred)
-            # Compute accuracy and F1 score
-            intent_acc = accuracy_score(all_intents, all_intent_preds)
-            slot_f1 = seqeval_f1(all_slots, all_slot_preds)
-
-            # Early stopping and model saving
-            if slot_f1 > best_f1:
-                best_f1 = slot_f1
-                patience = 3
-                # Save best model in a unique folder for each run
-                run_dir = os.path.join(path, f"run{run+1}", f"bin{run+1}")
-                os.makedirs(run_dir, exist_ok=True)
-                PATH = os.path.join(run_dir, "weights.pt")
-                torch.save(model.state_dict(), PATH)
-            else:
-                patience -= 1
-            if patience == 0:
-                break # Stop training if no improvement
-
-        # Testing on the test set
-        model.eval()  # Set model to evaluation mode
-        all_intents, all_intent_preds = [], []  # Lists to store true and predicted intents
-        all_slots, all_slot_preds = [], []      # Lists to store true and predicted slot sequences
-
-        with torch.no_grad():  # Disable gradient computation for evaluation
-            for batch in test_loader:
-                # Move all batch tensors to the correct device (CPU/GPU)
-                batch = {k: v.to(device) for k, v in batch.items()}
-                # Forward pass through the model (no labels, so no loss is returned)
-                _, intent_logits, slot_logits = model(
-                    input_ids=batch["input_ids"],
-                    attention_mask=batch["attention_mask"],
-                    token_type_ids=batch["token_type_ids"]
-                )
-                # Get predicted intent indices for each sample in the batch
-                intent_preds = intent_logits.argmax(dim=1).cpu().numpy()
-                # Store true and predicted intents
-                all_intents.extend(batch["intent_label"].cpu().numpy())
-                all_intent_preds.extend(intent_preds)
-                # For each sample in the batch, process slot predictions
-                for i, slot_label in enumerate(batch["slot_labels"]):
-                    true = []  # True slot labels for this sample
-                    pred = []  # Predicted slot labels for this sample
-                    for j, label_id in enumerate(slot_label.cpu().numpy()):
-                        if label_id != -100:  # Ignore special tokens ([CLS], [SEP], padding)
-                            true.append(id2slot[label_id])  # Convert true label index to string
-                            
-                            # Get predicted slot index for this token and convert to string
-                            pred.append(id2slot[slot_logits[i][j].argmax().item()])
-                    all_slots.append(true)
-                    all_slot_preds.append(pred)
-
-        # Compute and store metrics for this run
-        intent_accs.append(accuracy_score(all_intents, all_intent_preds))  # Intent classification accuracy
-        slot_f1s.append(seqeval_f1(all_slots, all_slot_preds))             # Slot filling F1 score (seqeval)
+    # Call the new training loop function
+    slot_f1s, intent_accs = training_loop(
+        runs=runs,
+        n_epochs=n_epochs,
+        train_loader=train_loader,
+        dev_loader=dev_loader,
+        test_loader=test_loader,
+        bert_model_name=bert_model_name,
+        intent2id=intent2id,
+        slot2id=slot2id,
+        id2slot=id2slot,
+        path=path,
+        device=device
+    )
 
     # After all runs, print the average and standard deviation of the metrics
     print('Slot F1', round(np.mean(slot_f1s), 3), '+-', round(np.std(slot_f1s), 3))

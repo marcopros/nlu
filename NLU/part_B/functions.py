@@ -1,155 +1,117 @@
 import torch
 import torch.nn as nn
-from conll import evaluate
-from sklearn.metrics import classification_report
 import os
-import matplotlib.pyplot as plt
+from transformers import BertConfig
+from model import JointBERT
+from sklearn.metrics import accuracy_score
+from seqeval.metrics import f1_score as seqeval_f1
+from tqdm import tqdm
+import numpy as np
 
-def init_weights(mat):
-    for m in mat.modules():
-        if type(m) in [nn.GRU, nn.LSTM, nn.RNN]:
-            for name, param in m.named_parameters():
-                if 'weight_ih' in name:
-                    for idx in range(4):
-                        mul = param.shape[0]//4
-                        torch.nn.init.xavier_uniform_(param[idx*mul:(idx+1)*mul])
-                elif 'weight_hh' in name:
-                    for idx in range(4):
-                        mul = param.shape[0]//4
-                        torch.nn.init.orthogonal_(param[idx*mul:(idx+1)*mul])
-                elif 'bias' in name:
-                    param.data.fill_(0)
-        else:
-            if type(m) in [nn.Linear]:
-                torch.nn.init.uniform_(m.weight, -0.01, 0.01)
-                if m.bias != None:
-                    m.bias.data.fill_(0.01)
+def training_loop(
+    runs,
+    n_epochs,
+    train_loader,
+    dev_loader,
+    test_loader,
+    bert_model_name,
+    intent2id,
+    slot2id,
+    id2slot,
+    path,
+    device
+):
+    slot_f1s, intent_accs = [], []
+    for run in tqdm(range(runs)):
+        config = BertConfig.from_pretrained(bert_model_name)
+        model = JointBERT.from_pretrained(
+            bert_model_name,
+            config=config,
+            num_intents=len(intent2id),
+            num_slots=len(slot2id)
+        ).to(device)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
+        best_f1 = 0
+        patience = 3
 
-def train_loop(data, optimizer, criterion_slots, criterion_intents, model, clip=5):
-    model.train()
-    loss_array = []
-    for sample in data:
-        optimizer.zero_grad() 
-        slots, intent = model(sample['utterances'], sample['slots_len'])
-        loss_intent = criterion_intents(intent, sample['intents'])
-        loss_slot = criterion_slots(slots, sample['y_slots'])
-        loss = loss_intent + loss_slot 
-        loss_array.append(loss.item())
-        loss.backward() 
-        torch.nn.utils.clip_grad_norm_(model.parameters(), clip)  
-        optimizer.step()
-    return loss_array
+        for epoch in range(n_epochs):
+            model.train()
+            for batch in train_loader:
+                optimizer.zero_grad()
+                batch = {k: v.to(device) for k, v in batch.items()}
+                loss, _, _ = model(
+                    input_ids=batch["input_ids"],
+                    attention_mask=batch["attention_mask"],
+                    token_type_ids=batch["token_type_ids"],
+                    slot_labels=batch["slot_labels"],
+                    intent_label=batch["intent_label"]
+                )
+                loss.backward()
+                optimizer.step()
 
-def eval_loop(data, criterion_slots, criterion_intents, model, lang):
-    model.eval()
-    loss_array = []
-    
-    ref_intents = []
-    hyp_intents = []
-    
-    ref_slots = []
-    hyp_slots = []
-    with torch.no_grad(): 
-        for sample in data:
-            slots, intents = model(sample['utterances'], sample['slots_len'])
-            loss_intent = criterion_intents(intents, sample['intents'])
-            loss_slot = criterion_slots(slots, sample['y_slots'])
-            loss = loss_intent + loss_slot 
-            loss_array.append(loss.item())
-            
-            # Intent inference
-            out_intents = [lang.id2intent[x] for x in torch.argmax(intents, dim=1).tolist()] 
-            gt_intents = [lang.id2intent[x] for x in sample['intents'].tolist()]
-            ref_intents.extend(gt_intents)
-            hyp_intents.extend(out_intents)
-            
-            # Slot inference 
-            output_slots = torch.argmax(slots, dim=1)
-            for id_seq, seq in enumerate(output_slots):
-                length = sample['slots_len'].tolist()[id_seq]
-                utt_ids = sample['utterance'][id_seq][:length].tolist()
-                gt_ids = sample['y_slots'][id_seq].tolist()
-                gt_slots = [lang.id2slot[elem] for elem in gt_ids[:length]]
-                utterance = [lang.id2word[elem] for elem in utt_ids]
-                to_decode = seq[:length].tolist()
-                ref_slots.append([(utterance[id_el], elem) for id_el, elem in enumerate(gt_slots)])
-                tmp_seq = []
-                for id_el, elem in enumerate(to_decode):
-                    tmp_seq.append((utterance[id_el], lang.id2slot[elem]))
-                hyp_slots.append(tmp_seq)
-    try:            
-        results = evaluate(ref_slots, hyp_slots)
-    except Exception as ex:
-        # Sometimes the model predicts a class that is not in REF
-        print("Warning:", ex)
-        ref_s = set([x[1] for x in ref_slots])
-        hyp_s = set([x[1] for x in hyp_slots])
-        print(hyp_s.difference(ref_s))
-        results = {"total":{"f":0}}
-        
-    report_intent = classification_report(ref_intents, hyp_intents, 
-                                          zero_division=False, output_dict=True)
-    return results, report_intent, loss_array
+            # Validation
+            model.eval()
+            all_intents, all_intent_preds = [], []
+            all_slots, all_slot_preds = [], []
+            with torch.no_grad():
+                for batch in dev_loader:
+                    batch = {k: v.to(device) for k, v in batch.items()}
+                    _, intent_logits, slot_logits = model(
+                        input_ids=batch["input_ids"],
+                        attention_mask=batch["attention_mask"],
+                        token_type_ids=batch["token_type_ids"]
+                    )
+                    intent_preds = intent_logits.argmax(dim=1).cpu().numpy()
+                    all_intents.extend(batch["intent_label"].cpu().numpy())
+                    all_intent_preds.extend(intent_preds)
+                    for i, slot_label in enumerate(batch["slot_labels"]):
+                        true = []
+                        pred = []
+                        for j, label_id in enumerate(slot_label.cpu().numpy()):
+                            if label_id != -100:
+                                true.append(id2slot[label_id])
+                                pred.append(id2slot[slot_logits[i][j].argmax().item()])
+                        all_slots.append(true)
+                        all_slot_preds.append(pred)
+            intent_acc = accuracy_score(all_intents, all_intent_preds)
+            slot_f1 = seqeval_f1(all_slots, all_slot_preds)
 
-def get_last_index(directory, base_name):
-    # Get a list of all files in the directory
-    files = os.listdir(directory)
-    # Filter out only the files with the specified base name
-    indices = []
-    for file in files:
-        if file.startswith(base_name):
-            try:
-                index = int(str(file[len(base_name):]))  # Extracting the numeric part
-                indices.append(index)
-            except ValueError:
-                pass
-    # Return the maximum index if files exist, otherwise return 0
-    return max(indices) if indices else -1
+            if slot_f1 > best_f1:
+                best_f1 = slot_f1
+                patience = 3
+                run_dir = os.path.join(path, f"run{run+1}", f"bin{run+1}")
+                os.makedirs(run_dir, exist_ok=True)
+                PATH = os.path.join(run_dir, "weights.pt")
+                torch.save(model.state_dict(), PATH)
+            else:
+                patience -= 1
+            if patience == 0:
+                break
 
-# Generate plot for the training and validation loss
-def generate_plots(epochs, loss_train, loss_validation, name):
-    plt.figure(figsize=(10, 6))
-    plt.plot(epochs, loss_train, label='Training Loss', marker='o')  
-    plt.plot(epochs, loss_validation, label='Validation Loss', marker='s')  
-    plt.title('Training and Validation Loss')  
-    plt.xlabel('Epochs')  
-    plt.ylabel('Loss')  
-    plt.legend()  
-    plt.grid(True)  
-    plt.tight_layout()
-    plt.savefig(name)
-
-# # Generate a report with the results
-# def generate_report(runs, epochs, number_epochs, lr, hidden_size, emb_size, model, optimizer, slot_f1, intent_acc, slot_f1_std, intent_acc_std, name):
-#     file = open(name, "w")
-#     file.write(f'runs: {runs} \n')
-#     file.write(f'epochs used: {epochs} \n')
-#     file.write(f'number epochs: {number_epochs} \n')
-#     file.write(f'lr: {lr} \n')
-#     file.write(f'hidden_size: {hidden_size} \n')
-#     file.write(f'embedding_size: {emb_size} \n')
-#     file.write(f'model: {model} \n')
-#     file.write(f'optimizer: {optimizer} \n')
-#     file.write(f'mean slot_f1: {slot_f1} variance {slot_f1_std}\n')
-#     file.write(f'mean intent_acc: {intent_acc} variance {intent_acc_std} \n')
-#     file.close()
-
-def generate_report(epochs, number_epochs, lr, hidden_size, emb_size, model, optimizer, slot_f1, intent_acc, slot_f1_std, intent_acc_std, name):
-    with open(name, "w") as file:
-        file.write(f'epochs used: {epochs} \n')
-        file.write(f'number epochs: {number_epochs} \n')
-        file.write(f'lr: {lr} \n')
-        file.write(f'hidden_size: {hidden_size} \n')
-        file.write(f'embedding_size: {emb_size} \n')
-        file.write(f'model: {model} \n')
-        file.write(f'optimizer: {optimizer} \n')
-        file.write(f'mean slot_f1: {slot_f1} variance {slot_f1_std}\n')
-        file.write(f'mean intent_acc: {intent_acc} variance {intent_acc_std} \n')
-
-# Create a new folder for the report
-def create_report_folder():
-    base_path = "/home/disi/nlu/NLU/part_B/reports"
-    last_index = get_last_index(os.path.dirname(base_path), os.path.basename(base_path))
-    foldername = f"{base_path}{last_index + 1:02d}"
-    os.mkdir(foldername)
-    return foldername
+        # Testing
+        model.eval()
+        all_intents, all_intent_preds = [], []
+        all_slots, all_slot_preds = [], []
+        with torch.no_grad():
+            for batch in test_loader:
+                batch = {k: v.to(device) for k, v in batch.items()}
+                _, intent_logits, slot_logits = model(
+                    input_ids=batch["input_ids"],
+                    attention_mask=batch["attention_mask"],
+                    token_type_ids=batch["token_type_ids"]
+                )
+                intent_preds = intent_logits.argmax(dim=1).cpu().numpy()
+                all_intents.extend(batch["intent_label"].cpu().numpy())
+                all_intent_preds.extend(intent_preds)
+                for i, slot_label in enumerate(batch["slot_labels"]):
+                    true = []
+                    pred = []
+                    for j, label_id in enumerate(slot_label.cpu().numpy()):
+                        if label_id != -100:
+                            true.append(id2slot[label_id])
+                            pred.append(id2slot[slot_logits[i][j].argmax().item()])
+                    all_slots.append(true)
+                    all_slot_preds.append(pred)
+        intent_accs.append(accuracy_score(all_intents, all_intent_preds))
+        slot_f1s.append(seqeval_f1(all_slots, all_slot_preds))
+    return slot_f1s, intent_accs

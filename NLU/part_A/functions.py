@@ -6,6 +6,7 @@ import os
 import matplotlib.pyplot as plt
 
 def init_weights(mat):
+    # Initialize weights for RNN/LSTM/GRU and Linear layers
     for m in mat.modules():
         if type(m) in [nn.GRU, nn.LSTM, nn.RNN]:
             for name, param in m.named_parameters():
@@ -26,6 +27,7 @@ def init_weights(mat):
                     m.bias.data.fill_(0.01)
 
 def train_loop(data, optimizer, criterion_slots, criterion_intents, model, clip=5):
+    # Training loop for one epoch
     model.train()
     loss_array = []
     for sample in data:
@@ -41,12 +43,11 @@ def train_loop(data, optimizer, criterion_slots, criterion_intents, model, clip=
     return loss_array
 
 def eval_loop(data, criterion_slots, criterion_intents, model, lang):
+    # Evaluation loop: computes losses and metrics
     model.eval()
     loss_array = []
-    
     ref_intents = []
     hyp_intents = []
-    
     ref_slots = []
     hyp_slots = []
     with torch.no_grad(): 
@@ -78,9 +79,9 @@ def eval_loop(data, criterion_slots, criterion_intents, model, lang):
                     tmp_seq.append((utterance[id_el], lang.id2slot[elem]))
                 hyp_slots.append(tmp_seq)
     try:            
-        results = evaluate(ref_slots, hyp_slots)
+        results = evaluate(ref_slots, hyp_slots)  # Slot F1 evaluation
     except Exception as ex:
-        # Sometimes the model predicts a class that is not in REF
+        # Handle rare prediction errors
         print("Warning:", ex)
         ref_s = set([x[1] for x in ref_slots])
         hyp_s = set([x[1] for x in hyp_slots])
@@ -92,22 +93,20 @@ def eval_loop(data, criterion_slots, criterion_intents, model, lang):
     return results, report_intent, loss_array
 
 def get_last_index(directory, base_name):
-    # Get a list of all files in the directory
+    # Returns the highest index for folders/files with a given base name
     files = os.listdir(directory)
-    # Filter out only the files with the specified base name
     indices = []
     for file in files:
         if file.startswith(base_name):
             try:
-                index = int(str(file[len(base_name):]))  # Extracting the numeric part
+                index = int(str(file[len(base_name):]))  # Extract numeric part
                 indices.append(index)
             except ValueError:
                 pass
-    # Return the maximum index if files exist, otherwise return 0
     return max(indices) if indices else -1
 
-# Generate plot for the training and validation loss
 def generate_plots(epochs, loss_train, loss_validation, name):
+    # Plot training and validation loss curves
     plt.figure(figsize=(10, 6))
     plt.plot(epochs, loss_train, label='Training Loss', marker='o')  
     plt.plot(epochs, loss_validation, label='Validation Loss', marker='s')  
@@ -119,22 +118,8 @@ def generate_plots(epochs, loss_train, loss_validation, name):
     plt.tight_layout()
     plt.savefig(name)
 
-# # Generate a report with the results
-# def generate_report(runs, epochs, number_epochs, lr, hidden_size, emb_size, model, optimizer, slot_f1, intent_acc, slot_f1_std, intent_acc_std, name):
-#     file = open(name, "w")
-#     file.write(f'runs: {runs} \n')
-#     file.write(f'epochs used: {epochs} \n')
-#     file.write(f'number epochs: {number_epochs} \n')
-#     file.write(f'lr: {lr} \n')
-#     file.write(f'hidden_size: {hidden_size} \n')
-#     file.write(f'embedding_size: {emb_size} \n')
-#     file.write(f'model: {model} \n')
-#     file.write(f'optimizer: {optimizer} \n')
-#     file.write(f'mean slot_f1: {slot_f1} variance {slot_f1_std}\n')
-#     file.write(f'mean intent_acc: {intent_acc} variance {intent_acc_std} \n')
-#     file.close()
-
 def generate_report(epochs, number_epochs, lr, hidden_size, emb_size, model, optimizer, slot_f1, intent_acc, slot_f1_std, intent_acc_std, name):
+    # Write a summary report of the experiment
     with open(name, "w") as file:
         file.write(f'epochs used: {epochs} \n')
         file.write(f'number epochs: {number_epochs} \n')
@@ -146,8 +131,8 @@ def generate_report(epochs, number_epochs, lr, hidden_size, emb_size, model, opt
         file.write(f'mean slot_f1: {slot_f1} variance {slot_f1_std}\n')
         file.write(f'mean intent_acc: {intent_acc} variance {intent_acc_std} \n')
 
-# Create a new folder for the report
 def create_report_folder():
+    # Create a new folder for saving reports
     base_path = "/home/disi/nlu/NLU/part_A/reports"
     last_index = get_last_index(os.path.dirname(base_path), os.path.basename(base_path))
     foldername = f"{base_path}{last_index + 1:02d}"

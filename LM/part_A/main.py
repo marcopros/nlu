@@ -38,7 +38,7 @@ if __name__ == "__main__":
     clip = 5 
 
     # Initialize the model and weights
-    model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
+    model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE) # If necessary, change the model by uncommenting in model.py
     model.apply(init_weights)
     
     optimizer = optim.SGD(model.parameters(), lr=lr)

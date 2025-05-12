@@ -12,19 +12,21 @@ class JointBERT(BertPreTrainedModel):
         self.init_weights()
 
     def forward(self, input_ids, attention_mask, token_type_ids, slot_labels = None, intent_label = None):
+        # Forward pass through BERT and classifiers
         outputs = self.bert(input_ids, attention_mask, token_type_ids)
-        sequence_output = self.dropout(outputs.last_hidden_state)
-        pooled_output = self.dropout(outputs.pooler_output)
+        sequence_output = self.dropout(outputs.last_hidden_state)  # Token-level representations
+        pooled_output = self.dropout(outputs.pooler_output)        # [CLS] representation
 
-        intent_logits = self.intent_classifier(pooled_output)
-        slot_logits = self.slot_classifier(sequence_output)
+        intent_logits = self.intent_classifier(pooled_output)      # Intent prediction
+        slot_logits = self.slot_classifier(sequence_output)        # Slot prediction
 
         loss = 0
         loss_fct = nn.CrossEntropyLoss()
         if intent_label is not None:
+            # Intent classification loss
             loss += loss_fct(intent_logits, intent_label)
         if slot_labels is not None:
-            # Flatten the tokens for slot loss
+            # Slot classification loss (only on non-masked tokens)
             active_loss = attention_mask.view(-1) == 1
             active_logits = slot_logits.view(-1, slot_logits.shape[-1])[active_loss]
             active_labels = slot_labels.view(-1)[active_loss]
