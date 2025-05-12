@@ -37,7 +37,7 @@ This change was implemented by setting the bidirectional parameter to True in th
  by 2 because it concatenates the forward and backward outputs.
  Dropout layers were also introduced after the embedding and LSTM layers to reduce overfitting and improve generalization.
 
- In the second part, the LSTM architecture was replaced with a BERT-based model, following the joint learning approach described by Chen et al.~\cite{chen2019bertjointintentclassification}.
+ In the second part, the LSTM architecture was replaced with a BERT-based model (inspiration took from the cited repository \cite{JointBERT}), following the joint learning approach described by Chen et al.~\cite{chen2019bertjointintentclassification}.
  The architecture consists of a pre-trained BERT encoder, with two task-specific heads: one for intent classification (using the [CLS] token) and one for slot filling (using the contextualized embeddings of each token).
  A key challenge was aligning slot labels with BERT’s sub-tokenization (WordPiece).
  For each word split into sub-tokens, only the first sub-token was assigned the original corresponding slot label, while the others were masked out from the loss computation using the ignore index (-100).
@@ -92,8 +92,11 @@ These results confirm the effectiveness of BERT for joint NLU tasks, significant
   \label{tab:results}
 \end{table}
 
-For the BERT-based model, the training was performed for 3 epochs with a batch size of 16 for 
-training, 32 for testing and validation, and a learning rate of $2 \times 10^{-5}$.
+For the BERT-based model, the training was performed with different values of 
+batch sizes and the best model was the one trained for 3 epochs with
+ a batch size of 16 for 
+training, 32 for testing and validation, and a learning rate 
+of $2 \times 10^{-5}$.
 
 \bibliographystyle{IEEEtran}
 
