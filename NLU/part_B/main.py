@@ -19,7 +19,6 @@ bert_model_name = "bert-large-uncased" # or "bert-base-uncased"
 
 # Define and if necessary create the path to the dataset
 path = '/home/disi/nlu/NLU/part_B'
-PAD_TOKEN = 0
 
 
 if __name__ == "__main__":
