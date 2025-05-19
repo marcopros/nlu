@@ -14,6 +14,7 @@ from model import *
 
 
 if __name__ == "__main__":
+    # If necessary, modify the path with the absolute path of the dataset
     train_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.train.txt')
     dev_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.valid.txt')
     test_raw = read_file('LM/part_A/dataset/PennTreeBank/ptb.test.txt')
