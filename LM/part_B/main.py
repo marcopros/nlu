@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 import math
 import numpy as np
 import torch.optim.lr_scheduler as lr_scheduler
-from model import LM_LSTM
+from model import *
 
 
 INTERVAL = 3

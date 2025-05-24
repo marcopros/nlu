@@ -6,3 +6,5 @@ Embedding size: 800
 Model: <class 'model.LM_LSTM'> 
 Optimizer: <class 'torch.optim.asgd.ASGD'> 
 Final Perplexity: 97.56364829448093 
+
+Final Version - LSTM + Weight Tying + Var Dropout + AvSGD

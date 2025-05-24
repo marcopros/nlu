@@ -1,0 +1,10 @@
+Epochs completed: 41 
+Total epochs: 100 
+Learning rate: 0.001 
+Hidden layer size: 400 
+Embedding size: 400 
+Model: <class 'model.LM_LSTM_WT'> 
+Optimizer: <class 'torch.optim.adam.Adam'> 
+Final Perplexity: 95.10763746940985 
+
+Exercise 1 - LSTM with only Weight Tying, no Var Dropout and no AvSGD
