@@ -28,25 +28,7 @@ The Perplexity for each experiment is shown below:
 
 Full detailed report is available in ```report.pdf```
 
+### Note:
+If necessary, uncomment the model you want to use in ```model.py```.
+If necessary, change the path of the dataset in ```main.py```
 
-
-## Directory Sructure
-```
-LM/part_A
-├── README.md
-├── dataset
-│   └── PennTreeBank
-│       ├── ptb.test.txt
-│       ├── ptb.train.txt
-│       └── ptb.valid.txt
-├── functions.py
-├── main.py
-├── model.py
-├── reports
-│   └── test00
-│       ├── plot.png
-│       ├── ppl_plot.png
-│       ├── report.txt
-│       └── weights.pt
-└── utils.py
-```

@@ -16,3 +16,6 @@ I've implemented the **Non-Monotonically Triggered Averaged SGD** in this way:
 2. **Averaging Implementation**: Uses PyTorch’s ```optim.ASGD```, which averages weights after triggering (```t0``` marks the start of averaging).
 During evaluation, it temporarily swaps model weights with the averaged weights (```optimizer.state[prm]['ax']```) to compute validation perplexity, then reverts to the latest weights for training.
 3. **Learning Rate**: The learning rate (```lr=2```) remains fixed until a StepLR scheduler decays it (every 5 epochs, ```gamma=0.75```).
+
+### Notes:
+If necessary, change the dataset path in ```main.py```
