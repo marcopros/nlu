@@ -12,7 +12,7 @@ import torch.optim.lr_scheduler as lr_scheduler
 from model import *
 
 # Configuration parameters - modify these to choose model configuration
-MODEL_CONFIG = "FULL"  # Options: "BASE", "VARDROP", "FULL"
+MODEL_CONFIG = "FULL"  # Options: "BASE", "VARDROP", "FULL"   <-- Change this to select the model configuration
 # "BASE": LSTM + Weight Tying
 # "VARDROP": LSTM + Weight Tying + Variational Dropout  
 # "FULL": LSTM + Weight Tying + Variational Dropout + AvSGD

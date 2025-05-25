@@ -1,0 +1,10 @@
+Epochs completed: 99 
+Total epochs: 100 
+Learning rate: 2 
+Hidden layer size: 400 
+Embedding size: 400 
+Model: <class 'model.LM_LSTM'> 
+Optimizer: <class 'torch.optim.asgd.ASGD'> 
+Final Perplexity: 89.47017964234567 
+
+Full config
