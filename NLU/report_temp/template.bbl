@@ -25,11 +25,6 @@
 UniTrento, ``Natural language understanding labs,'' 2025. [Online]. Available: \url{https://github.com/BrownFortress/NLU-2025-Labs/tree/main}
 \BIBentrySTDinterwordspacing
 
-\bibitem{JointBERT}
-\BIBentryALTinterwordspacing
-J.~Park, ``Jointbert repository,'' 2019. [Online]. Available: \url{https://github.com/monologg/JointBERT/tree/master}
-\BIBentrySTDinterwordspacing
-
 \bibitem{chen2019bertjointintentclassification}
 \BIBentryALTinterwordspacing
 Q.~Chen, Z.~Zhuo, and W.~Wang, ``Bert for joint intent classification and slot filling,'' 2019. [Online]. Available: \url{https://arxiv.org/abs/1902.10909}

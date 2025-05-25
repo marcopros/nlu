@@ -30,31 +30,26 @@ classification and slot filling on the ATIS dataset \cite{nlu-labs-unitn}, evalu
  involved fine-tuning and handling sub-tokenization, leveraging BERT’s contextual
  embeddings to boost performance in both tasks.
 \section{Implementation details}
-For the first part of the project, I've added incremental changes to the base IAS model.
-First, I added a bidirectional layer to the LSTM architecture, allowing the model to
-process the input sequence in both forward and backward directions. 
-This change was implemented by setting the bidirectional parameter to True in the LSTM layer and by multiplying the output
- by 2 because it concatenates the forward and backward outputs.
- Dropout layers were also introduced after the embedding and LSTM layers to reduce overfitting and improve generalization.
+For the first part of the project, I implemented incremental improvements to the base IAS model.
+First, I added bidirectionality to the LSTM architecture by setting the \texttt{bidirectional} parameter to True, allowing the model to process input sequences in both forward and backward directions. 
+This required doubling the output dimension of the intent classifier to accommodate the concatenated forward and backward hidden states.
+Dropout layers (probability 0.1) were introduced after the embedding and LSTM layers to reduce overfitting and improve generalization.
+The model was trained using the Adam optimizer with a learning rate of 0.0001 and early stopping based on validation slot F1-score, ensuring optimal convergence without overfitting.
 
- In the second part, the LSTM architecture was replaced with a BERT-based model (inspiration took from the cited repository \cite{JointBERT}), following the joint learning approach described by Chen et al.~\cite{chen2019bertjointintentclassification}.
- The architecture consists of a pre-trained BERT encoder, with two task-specific heads: one for intent classification (using the [CLS] token) and one for slot filling (using the contextualized embeddings of each token).
- A key challenge was aligning slot labels with BERT’s sub-tokenization (WordPiece).
- For each word split into sub-tokens, only the first sub-token was assigned the original corresponding slot label, while the others were masked out from the loss computation using the ignore index (-100).
- This ensured that the slot filling loss was computed only on valid positions.
- 
- The implemented model, named \textit{JointBERT}, is based on the \texttt{BertPreTrainedModel} class from the Transformers library.
- It comprises a BERT encoder, followed by two linear layers: one dedicated to intent classification and the other to slot filling.
- A dropout layer is applied before both classification heads to reduce overfitting.
- During the forward pass, the model first processes the input through BERT to obtain the last hidden states and the pooled [CLS] output.
- The pooled [CLS] embedding is fed to the intent classifier, while the full sequence of hidden states is fed to the slot classifier.
- The final loss is computed as the sum of the intent classification loss and the slot filling loss, where only the active tokens (those corresponding to valid input words) contribute to the slot loss computation.
- 
- The model was fine-tuned end-to-end on the ATIS dataset using the AdamW optimizer with a learning rate of $2 \times 10^{-5}$, a batch size of 16, and early stopping based on the slot F1-score on the validation set.
- The best model for each run was saved in a dedicated folder, and evaluation was performed on the official ATIS test set.
- Additionally, experiments were conducted using both the BERT base and large versions, with the large model achieving superior results at the cost of longer training time.
+In the second part, I replaced the LSTM architecture with a BERT-based model, following the joint learning approach described by Chen et al.~\cite{chen2019bertjointintentclassification}.
+The \textit{JointBERT} model, implemented using the \texttt{BertPreTrainedModel} class, consists of a pre-trained BERT encoder with two task-specific classification heads: one for intent classification using the [CLS] token representation, and one for slot filling using the contextualized token embeddings.
+The architecture leverages shared representations from BERT's transformer layers, enabling effective knowledge transfer between the two tasks.
 
+A critical implementation challenge was handling BERT's WordPiece sub-tokenization for slot filling.
+The \texttt{ATISDataset} class addresses this by using the tokenizer's \texttt{word\_ids} mapping to assign slot labels only to the first sub-token of each original word, while masking subsequent sub-tokens and special tokens with the ignore index (-100).
+This ensures that the slot filling loss is computed exclusively on meaningful token positions.
+The dataset class also handles variable-length sequences through padding and truncation, maintaining consistency across batches.
 
+During training, the model optimizes a joint loss function combining CrossEntropy losses for both tasks.
+The slot loss is calculated only on active tokens (where \texttt{attention\_mask == 1} and \texttt{slot\_labels != -100}), effectively ignoring padded positions and sub-tokens.
+The training loop implements early stopping based on slot F1-score validation performance, with the best model from each run saved automatically.
+I conducted experiments with both \texttt{bert-base-uncased} and \texttt{bert-large-uncased}, using AdamW optimizer with learning rate $2 \times 10^{-5}$ and batch sizes optimized for each model variant.
+The training process involved multiple runs to ensure statistical robustness, with each run initialized from different random seeds to account for training variance.
 \section{Results}
 The IAS Model was trained for 200 epoch over 5 runs, with early stopping based on the slot F1-score on the validation set.
 The learning rate was set to 0.0001, with a batch size of 128 for training and 64 for validation and testing. 
