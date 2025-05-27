@@ -8,4 +8,4 @@ optimizer: <class 'torch.optim.adam.Adam'>
 mean slot_f1: 0.925 variance 0.723
 mean intent_acc: 0.934 variance 0.776 
 
-## Multiple (5) Runs - Base AIS Model
+## Multiple (5) Runs - Baseline AIS Model

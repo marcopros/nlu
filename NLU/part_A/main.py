@@ -10,6 +10,12 @@ import torch.optim as optim
 from sklearn.model_selection import train_test_split
 from collections import Counter
 
+# Configuration parameters - modify this to choose model configuration
+MODEL_CONFIG = "IAS_BIDIR"  # Options: "IAS_BASELINE", "IAS_BIDIR", "IAS_BIDIR_DROPOUT"
+# "IAS_BASELINE": Baseline IAS model (unidirectional LSTM, no dropout)
+# "IAS_BIDIR": IAS + Bidirectional LSTM
+# "IAS_BIDIR_DROPOUT": IAS + Bidirectional LSTM + Dropout layers
+
 # If necessary, modify the path with the absolute path of the dataset
 path = '/home/disi/nlu/NLU/part_A'
 PAD_TOKEN = 0
@@ -66,27 +72,61 @@ if __name__ == "__main__":
     dev_loader = DataLoader(dev_dataset, batch_size=64, collate_fn=collate_fn)
     test_loader = DataLoader(test_dataset, batch_size=64, collate_fn=collate_fn)
 
-    # Model and training hyperparameters
-    hid_size = 200
-    emb_size = 300
-    lr = 0.0001
-    clip = 5
-
+    # Configure model and hyperparameters based on chosen configuration
     out_slot = len(lang.slot2id)
     out_int = len(lang.intent2id)
     vocab_len = len(lang.word2id)
+    
+    if MODEL_CONFIG == "IAS_BASELINE":
+        print("Using: Baseline IAS (Unidirectional LSTM, no dropout)")
+        hid_size = 200
+        emb_size = 300
+        lr = 0.0001
+        model = ModelIAS_Baseline(hid_size, out_slot, out_int, emb_size, 
+                                vocab_len, pad_index=PAD_TOKEN).to(device)
+        
+    elif MODEL_CONFIG == "IAS_BIDIR":
+        print("Using: IAS + Bidirectional LSTM")
+        hid_size = 200
+        emb_size = 300
+        lr = 0.0001
+        model = ModelIAS_Bidir(hid_size, out_slot, out_int, emb_size, 
+                             vocab_len, pad_index=PAD_TOKEN).to(device)
+        
+    elif MODEL_CONFIG == "IAS_BIDIR_DROPOUT":
+        print("Using: IAS + Bidirectional LSTM + Dropout")
+        hid_size = 200
+        emb_size = 300
+        lr = 0.0001
+        model = ModelIAS(hid_size, out_slot, out_int, emb_size, 
+                        vocab_len, pad_index=PAD_TOKEN).to(device)
+        
+    else:
+        raise ValueError("MODEL_CONFIG must be 'IAS_BASELINE', 'IAS_BIDIR', or 'IAS_BIDIR_DROPOUT'")
 
+    # Common hyperparameters
+    clip = 5
     n_epochs = 200
     runs = 5
     
+    print(f"Training with {MODEL_CONFIG} configuration...")
+    print(f"Model: {type(model).__name__}, Hidden size: {hid_size}, Embedding size: {emb_size}, LR: {lr}")
+    
     # Run multiple training runs for robustness
     slot_f1s, intent_acc = [], []
-    for x in tqdm(range(0, runs)):
-        # Model, optimizer, and loss setup
-        model = ModelIAS(hid_size, out_slot, out_int, emb_size, 
-                        vocab_len, pad_index=PAD_TOKEN).to(device)
+    for run in tqdm(range(0, runs), desc=f"Training runs ({MODEL_CONFIG})"):
+        # Reinitialize model for each run
+        if MODEL_CONFIG == "IAS_BASELINE":
+            model = ModelIAS_Baseline(hid_size, out_slot, out_int, emb_size, 
+                                    vocab_len, pad_index=PAD_TOKEN).to(device)
+        elif MODEL_CONFIG == "IAS_BIDIR":
+            model = ModelIAS_Bidir(hid_size, out_slot, out_int, emb_size, 
+                                 vocab_len, pad_index=PAD_TOKEN).to(device)
+        elif MODEL_CONFIG == "IAS_BIDIR_DROPOUT":
+            model = ModelIAS(hid_size, out_slot, out_int, emb_size, 
+                            vocab_len, pad_index=PAD_TOKEN).to(device)
+        
         model.apply(init_weights)
-
         optimizer = optim.Adam(model.parameters(), lr=lr)
         criterion_slots = nn.CrossEntropyLoss(ignore_index=PAD_TOKEN)
         criterion_intents = nn.CrossEntropyLoss()
@@ -96,12 +136,13 @@ if __name__ == "__main__":
         losses_dev = []
         sampled_epochs = []
         best_f1 = 0
+        
         # Training loop with early stopping
-        for x in range(1,n_epochs):
+        for epoch in range(1, n_epochs):
             loss = train_loop(train_loader, optimizer, criterion_slots, 
                             criterion_intents, model)
-            if x % 5 == 0:
-                sampled_epochs.append(x)
+            if epoch % 5 == 0:
+                sampled_epochs.append(epoch)
                 losses_train.append(np.asarray(loss).mean())
                 results_dev, intent_res, loss_dev = eval_loop(dev_loader, criterion_slots, 
                                                             criterion_intents, model, lang)
@@ -110,6 +151,7 @@ if __name__ == "__main__":
 
                 if f1 > best_f1:
                     best_f1 = f1
+                    patience = 3  # Reset patience
                 else:
                     patience -= 1
                 if patience <= 0: # Early stopping
@@ -120,10 +162,15 @@ if __name__ == "__main__":
                                                 criterion_intents, model, lang)
         intent_acc.append(intent_test['accuracy'])
         slot_f1s.append(results_test['total']['f'])
+        
+        print(f"Run {run+1}/{runs} - Slot F1: {results_test['total']['f']:.3f}, Intent Acc: {intent_test['accuracy']:.3f}")
+
+    # Calculate statistics
     slot_f1s = np.asarray(slot_f1s)
     intent_acc = np.asarray(intent_acc)
-    print('Slot F1', round(slot_f1s.mean(),3), '+-', round(slot_f1s.std(),3))
-    print('Intent Acc', round(intent_acc.mean(), 3), '+-', round(slot_f1s.std(), 3))
+    print(f'\n=== {MODEL_CONFIG} RESULTS ===')
+    print(f'Slot F1: {round(slot_f1s.mean(),3)} +- {round(slot_f1s.std(),3)}')
+    print(f'Intent Acc: {round(intent_acc.mean(), 3)} +- {round(intent_acc.std(), 3)}')
 
     # Save plots and report
     folder_name = create_report_folder()
@@ -136,12 +183,13 @@ if __name__ == "__main__":
     # Save model checkpoint
     PATH = os.path.join(report_bin_path, "weights_1.pt")
     saving_object = {
-        "epoch": x, 
+        "epoch": epoch, 
         "model": model.state_dict(), 
         "optimizer": optimizer.state_dict(), 
         "w2id": lang.word2id, 
         "slot2id": lang.slot2id, 
-        "intent2id": lang.intent2id
+        "intent2id": lang.intent2id,
+        "config": MODEL_CONFIG
     }
     torch.save(saving_object, PATH)
 
@@ -154,10 +202,10 @@ if __name__ == "__main__":
         emb_size=emb_size, 
         model=str(type(model)), 
         optimizer=str(type(optimizer)), 
-        slot_f1=round(results_test['total']['f'], 3), 
-        intent_acc=round(intent_test['accuracy'], 3), 
-        slot_f1_std=round(np.std(losses_dev), 3), 
-        intent_acc_std=round(np.std(losses_train), 3), 
+        slot_f1=round(slot_f1s.mean(), 3), 
+        intent_acc=round(intent_acc.mean(), 3), 
+        slot_f1_std=round(slot_f1s.std(), 3), 
+        intent_acc_std=round(intent_acc.std(), 3), 
         name=os.path.join(folder_name, "report.txt")
     )
 

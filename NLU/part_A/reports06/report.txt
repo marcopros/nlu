@@ -1,0 +1,11 @@
+epochs used: 195 
+number epochs: 200 
+lr: 0.0001 
+hidden_size: 200 
+embedding_size: 300 
+model: <class 'model.ModelIAS_Bidir'> 
+optimizer: <class 'torch.optim.adam.Adam'> 
+mean slot_f1: 0.939 variance 0.001
+mean intent_acc: 0.943 variance 0.003 
+
+Bidir - best results 

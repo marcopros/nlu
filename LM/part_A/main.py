@@ -12,6 +12,12 @@ import math
 import numpy as np
 from model import *
 
+# Configuration parameters - modify this to choose model configuration
+MODEL_CONFIG = "LSTM_DROPOUT_ADAMW"  # Options: "RNN", "LSTM", "LSTM_DROPOUT", "LSTM_DROPOUT_ADAMW" <-- Change this to select the model configuration
+# "RNN": Baseline RNN
+# "LSTM": LSTM model  
+# "LSTM_DROPOUT": LSTM + Dropout Layers
+# "LSTM_DROPOUT_ADAMW": LSTM + Dropout Layers + AdamW optimizer
 
 if __name__ == "__main__":
     # If necessary, modify the path with the absolute path of the dataset
@@ -31,26 +37,54 @@ if __name__ == "__main__":
     dev_loader = DataLoader(dev_dataset, batch_size=128, collate_fn=partial(collate_fn, pad_token=lang.word2id["<pad>"]))
     test_loader = DataLoader(test_dataset, batch_size=128, collate_fn=partial(collate_fn, pad_token=lang.word2id["<pad>"]))
 
-    # Hyperparameters
-    hid_size = 250 # change
-    emb_size = 300 # change 
+    # Configure model and hyperparameters based on chosen configuration
+    if MODEL_CONFIG == "RNN":
+        print("Using: Baseline RNN")
+        hid_size = 100
+        emb_size = 100
+        lr = 0.1
+        model = LM_RNN(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
+        optimizer = optim.SGD(model.parameters(), lr=lr)
+        patience = 3
+        
+    elif MODEL_CONFIG == "LSTM":
+        print("Using: LSTM")
+        hid_size = 300
+        emb_size = 300
+        lr = 2
+        model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
+        optimizer = optim.SGD(model.parameters(), lr=lr)
+        patience = 3
+        
+    elif MODEL_CONFIG == "LSTM_DROPOUT":
+        print("Using: LSTM + Dropout Layers")
+        hid_size = 300
+        emb_size = 300
+        lr = 2
+        model = LM_LSTM_DL(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
+        optimizer = optim.SGD(model.parameters(), lr=lr)
+        patience = 3
+        
+    elif MODEL_CONFIG == "LSTM_DROPOUT_ADAMW":
+        print("Using: LSTM + Dropout Layers + AdamW")
+        hid_size = 250
+        emb_size = 300
+        lr = 0.001
+        model = LM_LSTM_DL(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
+        optimizer = optim.AdamW(model.parameters(), lr=lr)
+        patience = 3
+        
+    else:
+        raise ValueError("MODEL_CONFIG must be 'RNN', 'LSTM', 'LSTM_DROPOUT', or 'LSTM_DROPOUT_ADAMW'")
 
-    lr = 0.1
-    clip = 5 
-
-    # Initialize the model and weights
-    model = LM_LSTM(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE) # If necessary, change the model by uncommenting in model.py
+    # Common hyperparameters
+    clip = 5
     model.apply(init_weights)
     
-    optimizer = optim.SGD(model.parameters(), lr=lr)
-    # optimizer = optim.AdamW(model.parameters(), lr=lr)
     criterion_train = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"])
     criterion_eval = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"], reduction='sum')       
 
-    
-
     n_epochs = 100
-    patience = 3
     losses_train = []
     losses_dev = []    
     perplexity_list = []
@@ -58,6 +92,10 @@ if __name__ == "__main__":
     best_ppl = math.inf
     best_model = None
     pbar = tqdm(range(1,n_epochs))
+    
+    print(f"Training with {MODEL_CONFIG} configuration...")
+    print(f"Model: {type(model).__name__}, Optimizer: {type(optimizer).__name__}, LR: {lr}")
+    print(f"Hidden size: {hid_size}, Embedding size: {emb_size}")
     
     # Train loop   
     for epoch in pbar:
@@ -92,6 +130,6 @@ if __name__ == "__main__":
     torch.save(best_model.state_dict(), os.path.join(folder, "weights.pt"))
     generate_training_report(sampled_epochs[-1], n_epochs, lr, hid_size, emb_size, str(type(model)), str(type(optimizer)),final_ppl, os.path.join(folder,"report.txt"))
 
-    
+
 
 
