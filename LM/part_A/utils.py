@@ -2,7 +2,7 @@ import torch
 import torch.utils.data as data
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(f'using device: {DEVICE}')    
+print(f'Using device: {DEVICE}')    
 
 # Reads a text file and adds an end-of-sentence token to each line
 def read_file(path, eos_token="<eos>"):

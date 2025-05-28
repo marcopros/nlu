@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     if EVALUATION_MODE:
         print("=" * 60)
-        print("EVALUATION MODE")
+        print("📊 EVALUATION MODE")
         print("=" * 60)
         print(f"Loading model weights from: {EVALUATION_MODEL_PATH}")
         print(f"Model configuration: {MODEL_CONFIG}")
@@ -101,17 +101,17 @@ if __name__ == "__main__":
             model.load_state_dict(torch.load(EVALUATION_MODEL_PATH, map_location=DEVICE))
             model.to(DEVICE)
             model.eval()
-            print("Model weights loaded successfully!")
+            print("📊 Model weights loaded successfully!")
             
             # Evaluate on test set
-            print("\nEvaluating on test set...")
+            print("\n📊 Evaluating on test set...")
             test_ppl, test_loss = eval_loop(test_loader, criterion_eval, model)
             
             print("=" * 60)
-            print("EVALUATION RESULTS")
+            print("📊 EVALUATION RESULTS")
             print("=" * 60)
-            print(f"Test Perplexity: {test_ppl:.4f}")
-            print(f"Test Loss: {test_loss:.4f}")
+            print(f"✅ Test Perplexity: {test_ppl:.4f}")
+            print(f"✅ Test Loss: {test_loss:.4f}")
             print("=" * 60)
             
         except FileNotFoundError:
@@ -122,7 +122,7 @@ if __name__ == "__main__":
             
     else:
         print("=" * 60)
-        print("TRAINING MODE") 
+        print("🔧 TRAINING MODE") 
         print("=" * 60)
     
         # Training variables
@@ -136,7 +136,7 @@ if __name__ == "__main__":
         best_model = None
         pbar = tqdm(range(1, n_epochs))
 
-        print(f"Training with {MODEL_CONFIG} configuration...")
+        print(f"🔧 Training with {MODEL_CONFIG} configuration...")
         print(f"Model: {type(model).__name__}, Optimizer: {type(optimizer).__name__}, LR: {lr}")
 
         # Training loop
@@ -163,7 +163,7 @@ if __name__ == "__main__":
                     # Trigger AvSGD if using FULL configuration and validation loss is non-monotonic
                     if (use_asgd and 't0' not in optimizer.param_groups[0] and 
                         len(best_val_loss) > INTERVAL and loss_dev > min(best_val_loss[:-INTERVAL])):
-                        print("Triggered, switching to ASGD")
+                        print("🚀 Triggered, switching to ASGD")
                         optimizer = optim.ASGD(model.parameters(), lr=lr, t0=0, lambd=0.)
                     if use_asgd:
                         best_val_loss.append(loss_dev)
@@ -188,7 +188,7 @@ if __name__ == "__main__":
         best_model.to(DEVICE)
         # Final evaluation on the test set
         final_ppl, _ = eval_loop(test_loader, criterion_eval, best_model)  
-        print('Test ppl: ', final_ppl)
+        print('📊 Test ppl: ', final_ppl)
 
         # Save results and plots
         folder = create_new_report_directory()

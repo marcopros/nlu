@@ -13,14 +13,14 @@ import numpy as np
 from model import *
 
 # Configuration parameters - modify this to choose model configuration
-MODEL_CONFIG = "RNN"  # Options: "RNN", "LSTM", "LSTM_DROPOUT", "LSTM_DROPOUT_ADAMW" 
+MODEL_CONFIG = "LSTM_DROPOUT_ADAMW"  # Options: "RNN", "LSTM", "LSTM_DROPOUT", "LSTM_DROPOUT_ADAMW" 
 # "RNN": Baseline RNN
 # "LSTM": LSTM model  
 # "LSTM_DROPOUT": LSTM + Dropout Layers
 # "LSTM_DROPOUT_ADAMW": LSTM + Dropout Layers + AdamW optimizer
 
 # Evaluation configuration
-EVALUATION_MODE = False  # Set to True to load and evaluate a pre-trained model
+EVALUATION_MODE = True  # Set to True to load and evaluate a pre-trained model
 EVALUATION_MODEL_PATH = "LM/part_A/bin/LSTM_Drop_AdamW/weights.pt"  # Path to the model weights for evaluation
 # Available model paths:
 # "LM/part_A/bin/RNN_baseline/weights.pt"
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     if EVALUATION_MODE:
         print("=" * 60)
-        print("EVALUATION MODE")
+        print("📊 EVALUATION MODE")
         print("=" * 60)
         print(f"Loading model weights from: {EVALUATION_MODEL_PATH}")
         print(f"Model configuration: {MODEL_CONFIG}")
@@ -107,17 +107,17 @@ if __name__ == "__main__":
             model.load_state_dict(torch.load(EVALUATION_MODEL_PATH, map_location=DEVICE))
             model.to(DEVICE)
             model.eval()
-            print("Model weights loaded successfully!")
+            print("📊 Model weights loaded successfully!")
             
             # Evaluate on test set
-            print("\nEvaluating on test set...")
+            print("\n📊 Evaluating on test set...")
             test_ppl, test_loss = eval_loop(test_loader, criterion_eval, model)
             
             print("=" * 60)
-            print("EVALUATION RESULTS")
+            print("📊 EVALUATION RESULTS")
             print("=" * 60)
-            print(f"Test Perplexity: {test_ppl:.4f}")
-            print(f"Test Loss: {test_loss:.4f}")
+            print(f"✅ Test Perplexity: {test_ppl:.4f}")
+            print(f"✅ Test Loss: {test_loss:.4f}")
             print("=" * 60)
             
         except FileNotFoundError:
@@ -128,7 +128,7 @@ if __name__ == "__main__":
             
     else:
         print("=" * 60)
-        print("TRAINING MODE")
+        print("🔧 TRAINING MODE")
         print("=" * 60)
     
         n_epochs = 100
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         best_model = None
         pbar = tqdm(range(1,n_epochs))
         
-        print(f"Training with {MODEL_CONFIG} configuration...")
+        print(f"🔧 Training with {MODEL_CONFIG} configuration...")
         print(f"Model: {type(model).__name__}, Optimizer: {type(optimizer).__name__}, LR: {lr}")
         print(f"Hidden size: {hid_size}, Embedding size: {emb_size}")
         
@@ -168,7 +168,7 @@ if __name__ == "__main__":
         # evaluate the best model on the test set
         final_ppl,  _ = eval_loop(test_loader, criterion_eval, best_model)    
                 
-        print('Test ppl: ', final_ppl)
+        print('📊 Test ppl: ', final_ppl)
 
         # Save the model and create plots
         folder = create_new_report_directory()
@@ -176,7 +176,4 @@ if __name__ == "__main__":
         plot_perplexity_curve(sampled_epochs, perplexity_list, os.path.join(folder, 'ppl_plot.png'))
         torch.save(best_model.state_dict(), os.path.join(folder, "weights.pt"))
         generate_training_report(sampled_epochs[-1], n_epochs, lr, hid_size, emb_size, str(type(model)), str(type(optimizer)),final_ppl, os.path.join(folder,"report.txt"))
-
-
-
 
