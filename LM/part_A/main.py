@@ -13,11 +13,20 @@ import numpy as np
 from model import *
 
 # Configuration parameters - modify this to choose model configuration
-MODEL_CONFIG = "LSTM_DROPOUT_ADAMW"  # Options: "RNN", "LSTM", "LSTM_DROPOUT", "LSTM_DROPOUT_ADAMW" <-- Change this to select the model configuration
+MODEL_CONFIG = "RNN"  # Options: "RNN", "LSTM", "LSTM_DROPOUT", "LSTM_DROPOUT_ADAMW" 
 # "RNN": Baseline RNN
 # "LSTM": LSTM model  
 # "LSTM_DROPOUT": LSTM + Dropout Layers
 # "LSTM_DROPOUT_ADAMW": LSTM + Dropout Layers + AdamW optimizer
+
+# Evaluation configuration
+EVALUATION_MODE = False  # Set to True to load and evaluate a pre-trained model
+EVALUATION_MODEL_PATH = "LM/part_A/bin/LSTM_Drop_AdamW/weights.pt"  # Path to the model weights for evaluation
+# Available model paths:
+# "LM/part_A/bin/RNN_baseline/weights.pt"
+# "LM/part_A/bin/LSTM/weights.pt" 
+# "LM/part_A/bin/LSTM_Drop/weights.pt"
+# "LM/part_A/bin/LSTM_Drop_AdamW/weights.pt"
 
 if __name__ == "__main__":
     # If necessary, modify the path with the absolute path of the dataset
@@ -84,51 +93,89 @@ if __name__ == "__main__":
     criterion_train = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"])
     criterion_eval = nn.CrossEntropyLoss(ignore_index=lang.word2id["<pad>"], reduction='sum')       
 
-    n_epochs = 100
-    losses_train = []
-    losses_dev = []    
-    perplexity_list = []
-    sampled_epochs = []
-    best_ppl = math.inf
-    best_model = None
-    pbar = tqdm(range(1,n_epochs))
-    
-    print(f"Training with {MODEL_CONFIG} configuration...")
-    print(f"Model: {type(model).__name__}, Optimizer: {type(optimizer).__name__}, LR: {lr}")
-    print(f"Hidden size: {hid_size}, Embedding size: {emb_size}")
-    
-    # Train loop   
-    for epoch in pbar:
-            loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    
-            if epoch % 1 == 0:  # validate every epoch
-                sampled_epochs.append(epoch)
-                losses_train.append(np.asarray(loss).mean())
-                ppl_dev, loss_dev = eval_loop(dev_loader, criterion_eval, model)
-                losses_dev.append(np.asarray(loss_dev).mean())
-                perplexity_list.append(ppl_dev)
-                pbar.set_description("PPL: %f" % ppl_dev)
-                if  ppl_dev < best_ppl: 
-                    best_ppl = ppl_dev
-                    best_model = copy.deepcopy(model).to('cpu')
-                    patience = 3
-                else:
-                    patience -= 1
-                    
-                if patience <= 0: # Early stopping 
-                    break 
-
-    best_model.to(DEVICE)
-    # evaluate the best model on the test set
-    final_ppl,  _ = eval_loop(test_loader, criterion_eval, best_model)    
+    if EVALUATION_MODE:
+        print("=" * 60)
+        print("EVALUATION MODE")
+        print("=" * 60)
+        print(f"Loading model weights from: {EVALUATION_MODEL_PATH}")
+        print(f"Model configuration: {MODEL_CONFIG}")
+        print(f"Model: {type(model).__name__}")
+        print(f"Hidden size: {hid_size}, Embedding size: {emb_size}")
+        
+        # Load the pre-trained weights
+        try:
+            model.load_state_dict(torch.load(EVALUATION_MODEL_PATH, map_location=DEVICE))
+            model.to(DEVICE)
+            model.eval()
+            print("Model weights loaded successfully!")
             
-    print('Test ppl: ', final_ppl)
+            # Evaluate on test set
+            print("\nEvaluating on test set...")
+            test_ppl, test_loss = eval_loop(test_loader, criterion_eval, model)
+            
+            print("=" * 60)
+            print("EVALUATION RESULTS")
+            print("=" * 60)
+            print(f"Test Perplexity: {test_ppl:.4f}")
+            print(f"Test Loss: {test_loss:.4f}")
+            print("=" * 60)
+            
+        except FileNotFoundError:
+            print(f"Error: Model file not found at {EVALUATION_MODEL_PATH}")
+            print("Please check the path and make sure the file exists.")
+        except Exception as e:
+            print(f"Error loading model: {e}")
+            
+    else:
+        print("=" * 60)
+        print("TRAINING MODE")
+        print("=" * 60)
+    
+        n_epochs = 100
+        losses_train = []
+        losses_dev = []    
+        perplexity_list = []
+        sampled_epochs = []
+        best_ppl = math.inf
+        best_model = None
+        pbar = tqdm(range(1,n_epochs))
+        
+        print(f"Training with {MODEL_CONFIG} configuration...")
+        print(f"Model: {type(model).__name__}, Optimizer: {type(optimizer).__name__}, LR: {lr}")
+        print(f"Hidden size: {hid_size}, Embedding size: {emb_size}")
+        
+        # Train loop   
+        for epoch in pbar:
+                loss = train_loop(train_loader, optimizer, criterion_train, model, clip)    
+                if epoch % 1 == 0:  # validate every epoch
+                    sampled_epochs.append(epoch)
+                    losses_train.append(np.asarray(loss).mean())
+                    ppl_dev, loss_dev = eval_loop(dev_loader, criterion_eval, model)
+                    losses_dev.append(np.asarray(loss_dev).mean())
+                    perplexity_list.append(ppl_dev)
+                    pbar.set_description("PPL: %f" % ppl_dev)
+                    if  ppl_dev < best_ppl: 
+                        best_ppl = ppl_dev
+                        best_model = copy.deepcopy(model).to('cpu')
+                        patience = 3
+                    else:
+                        patience -= 1
+                        
+                    if patience <= 0: # Early stopping 
+                        break 
 
-    # Save the model and create plots
-    folder = create_new_report_directory()
-    plot_loss_curve(sampled_epochs, losses_train, losses_dev, os.path.join(folder, 'plot.png'))
-    plot_perplexity_curve(sampled_epochs, perplexity_list, os.path.join(folder, 'ppl_plot.png'))
-    torch.save(best_model.state_dict(), os.path.join(folder, "weights.pt"))
-    generate_training_report(sampled_epochs[-1], n_epochs, lr, hid_size, emb_size, str(type(model)), str(type(optimizer)),final_ppl, os.path.join(folder,"report.txt"))
+        best_model.to(DEVICE)
+        # evaluate the best model on the test set
+        final_ppl,  _ = eval_loop(test_loader, criterion_eval, best_model)    
+                
+        print('Test ppl: ', final_ppl)
+
+        # Save the model and create plots
+        folder = create_new_report_directory()
+        plot_loss_curve(sampled_epochs, losses_train, losses_dev, os.path.join(folder, 'plot.png'))
+        plot_perplexity_curve(sampled_epochs, perplexity_list, os.path.join(folder, 'ppl_plot.png'))
+        torch.save(best_model.state_dict(), os.path.join(folder, "weights.pt"))
+        generate_training_report(sampled_epochs[-1], n_epochs, lr, hid_size, emb_size, str(type(model)), str(type(optimizer)),final_ppl, os.path.join(folder,"report.txt"))
 
 
 

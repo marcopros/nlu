@@ -2,33 +2,16 @@
 
 In this part of the project, I applied several modifications to the baseline ```LM_RNN``` model to improve its performance. Each modification was added incrementally, and its impact on Perplexity (PPL) was evaluated. If a modification resulted in worse performance, I removed it and moved on to the next one. 
 
-### Modifications:
-
-1. **Replacing RNN with LSTM**:
-   I replaced the baseline RNN model with a Long-Short Term Memory (LSTM) network. This change improved the model's ability to handle long-term dependencies, leading to a reduction in Perplexity.
-
-2. **Adding Dropout Layers**:
-   To prevent overfitting, I added two dropout layers:
-   - One dropout layer after the embedding layer.
-   - One dropout layer before the final linear layer.
-   These dropout layers helped to regularize the model, improving its generalization and lowering the Perplexity.
-
-3. **Replacing SGD with AdamW**:
-   I replaced the Stochastic Gradient Descent (SGD) optimizer with AdamW. This change led to better training stability and convergence, contributing to a further reduction in Perplexity.
-
-### Hyperparameter Optimization:
-I conducted hyperparameter optimization to fine-tune the model. In particular, I experimented with different learning rates, embedding and hidden sizes to minimize Perplexity. The best configuration was found with a learning rate of  $10^{-3}$, used in the last modification, which achieved the lowest Perplexity.
-
-The Perplexity for each experiment is shown below:
-- Baseline RNN: ```173.22```
-- After replacing RNN with LSTM: ```137.31```
-- After adding dropout layers: ```123.14```
-- After replacing SGD with AdamW: ```109.43```
-
-
-Full detailed report is available in ```report.pdf```
-
 ### Note:
-If necessary, uncomment the model you want to use in ```model.py```.
-If necessary, change the path of the dataset in ```main.py```
+To configure and run the code:
+
+1. **Model Configuration**: Change the `MODEL_CONFIG` variable in `main.py` to select the desired model:
+   - `"RNN"`: Baseline RNN model
+   - `"LSTM"`: LSTM model  
+   - `"LSTM_DROPOUT"`: LSTM with dropout layers
+   - `"LSTM_DROPOUT_ADAMW"`: LSTM with dropout layers and AdamW optimizer
+
+2. **Evaluation Mode**: Set `EVALUATION_MODE = True` in `main.py` to evaluate a pre-trained model instead of training. Update `EVALUATION_MODEL_PATH` with the path to your saved model weights.
+
+3. **Dataset Path**: If necessary, change the path of the dataset in `main.py` (lines starting with `train_raw`, `dev_raw`, `test_raw`).
 
