@@ -126,3 +126,53 @@ def training_loop(
         intent_accs.append(accuracy_score(all_intents, all_intent_preds))
         slot_f1s.append(seqeval_f1(all_slots, all_slot_preds))
     return slot_f1s, intent_accs
+
+def evaluate_model(model, test_loader, id2slot, device):
+    """
+    Evaluate a trained model on the test set.
+    
+    Args:
+        model: Trained JointBERT model
+        test_loader: DataLoader for test data
+        id2slot: Dictionary mapping slot IDs to slot names
+        device: Device to run evaluation on
+    
+    Returns:
+        intent_acc: Intent classification accuracy
+        slot_f1: Slot filling F1 score
+    """
+    model.eval()
+    all_intents, all_intent_preds = [], []
+    all_slots, all_slot_preds = [], []
+    
+    with torch.no_grad():
+        for batch in tqdm(test_loader, desc="📊 Evaluating"):
+            batch = {k: v.to(device) for k, v in batch.items()}
+            _, intent_logits, slot_logits = model(
+                input_ids=batch["input_ids"],
+                attention_mask=batch["attention_mask"],
+                token_type_ids=batch["token_type_ids"]
+            )
+            
+            # Intent predictions
+            intent_preds = intent_logits.argmax(dim=1).cpu().numpy()
+            all_intents.extend(batch["intent_label"].cpu().numpy())
+            all_intent_preds.extend(intent_preds)
+            
+            # Slot predictions (only for valid sub-tokens)
+            for i, slot_label in enumerate(batch["slot_labels"]):
+                true = []
+                pred = []
+                for j, label_id in enumerate(slot_label.cpu().numpy()):
+                    # Only consider positions where label_id != -100 (ignore index for sub-tokens and special tokens)
+                    if label_id != -100:
+                        true.append(id2slot[label_id])
+                        pred.append(id2slot[slot_logits[i][j].argmax().item()])
+                all_slots.append(true)
+                all_slot_preds.append(pred)
+    
+    # Calculate metrics
+    intent_acc = accuracy_score(all_intents, all_intent_preds)
+    slot_f1 = seqeval_f1(all_slots, all_slot_preds)
+    
+    return intent_acc, slot_f1
