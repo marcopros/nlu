@@ -17,12 +17,12 @@ from collections import Counter
 # Set to True to enable evaluation mode (load pre-trained weights and evaluate on test set)
 EVALUATION_MODE = True  
 # Path to the saved model weights (.pt file) for evaluation
-EVALUATION_MODEL_PATH = "NLU/part_B/run3/bin3/weights.pt"  # Update this path to your saved model weights
+EVALUATION_MODEL_PATH = "/home/disi/nlu/NLU/part_B/best_model/weights.pt"  # Best model from all runs
 # ====================================================================
 
 # Set device and model name
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-bert_model_name = "bert-large-uncased" # or "bert-base-uncased"
+bert_model_name = "bert-base-uncased" # or "bert-base-uncased"
 
 # Define and if necessary create the path to the dataset
 path = '/home/disi/nlu/NLU/part_B'

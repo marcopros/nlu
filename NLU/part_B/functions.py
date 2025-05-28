@@ -23,6 +23,9 @@ def training_loop(
 ):
     # Lists to store metrics for each run
     slot_f1s, intent_accs = [], []
+    best_overall_f1 = 0
+    best_model_state = None
+    
     for run in tqdm(range(runs)):
         # Initialize BERT config and model for each run
         config = BertConfig.from_pretrained(bert_model_name)
@@ -35,6 +38,7 @@ def training_loop(
         optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
         best_f1 = 0
         patience = 3
+        best_model_state_run = None
 
         # Training loop for each epoch
         for epoch in range(n_epochs):
@@ -85,18 +89,20 @@ def training_loop(
             intent_acc = accuracy_score(all_intents, all_intent_preds)
             slot_f1 = seqeval_f1(all_slots, all_slot_preds)
 
-            # Early stopping and model saving based on best slot F1
+            # Early stopping based on best slot F1 (without saving during training)
             if slot_f1 > best_f1:
                 best_f1 = slot_f1
                 patience = 3
-                run_dir = os.path.join(path, f"run{run+1}", f"bin{run+1}")
-                os.makedirs(run_dir, exist_ok=True)
-                PATH = os.path.join(run_dir, "weights.pt")
-                torch.save(model.state_dict(), PATH)
+                # Save best model state for this run (in memory only)
+                best_model_state_run = model.state_dict().copy()
             else:
                 patience -= 1
             if patience == 0:
                 break
+
+        # Load the best model from this run for testing
+        if best_model_state_run is not None:
+            model.load_state_dict(best_model_state_run)
 
         # Testing phase: evaluate the best model on the test set
         model.eval()
@@ -125,6 +131,21 @@ def training_loop(
         # Store metrics for this run
         intent_accs.append(accuracy_score(all_intents, all_intent_preds))
         slot_f1s.append(seqeval_f1(all_slots, all_slot_preds))
+        
+        # Check if this is the best run overall
+        current_f1 = seqeval_f1(all_slots, all_slot_preds)
+        if current_f1 > best_overall_f1:
+            best_overall_f1 = current_f1
+            best_model_state = best_model_state_run.copy()
+    
+    # Save only the best model from all runs
+    if best_model_state is not None:
+        model_dir = os.path.join(path, "best_model")
+        os.makedirs(model_dir, exist_ok=True)
+        PATH = os.path.join(model_dir, "weights.pt")
+        torch.save(best_model_state, PATH)
+        print(f"✅ Best model saved to: {PATH} (F1: {best_overall_f1:.4f})")
+    
     return slot_f1s, intent_accs
 
 def evaluate_model(model, test_loader, id2slot, device):
