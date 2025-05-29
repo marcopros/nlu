@@ -1,5 +1,5 @@
 # Import necessary libraries
-from transformers import BertTokenizerFast, BertConfig, AdamW
+from transformers import BertTokenizerFast, BertConfig
 from model import JointBERT
 from torch.utils.data import DataLoader, Dataset
 from seqeval.metrics import f1_score as seqeval_f1
@@ -17,7 +17,7 @@ from collections import Counter
 # Set to True to enable evaluation mode (load pre-trained weights and evaluate on test set)
 EVALUATION_MODE = True  
 # Path to the saved model weights (.pt file) for evaluation
-EVALUATION_MODEL_PATH = "/home/disi/nlu/NLU/part_B/best_model/weights.pt"  # Best model from all runs
+EVALUATION_MODEL_PATH = "NLU/part_B/bin/bert-base/weights.pt"  # Best model from all runs
 # ====================================================================
 
 # Set device and model name
@@ -25,8 +25,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 bert_model_name = "bert-base-uncased" # or "bert-base-uncased"
 
 # Define and if necessary create the path to the dataset
-path = '/home/disi/nlu/NLU/part_B'
-
+path = 'NLU/part_B/dataset'
 
 if __name__ == "__main__":
     
@@ -45,11 +44,11 @@ if __name__ == "__main__":
         print("🔧 TRAINING MODE")
     
     train_raw, dev_raw = load_and_split_data(
-        os.path.join(path, 'dataset', 'train.json'),
+        os.path.join(path,'train.json'),
         portion=0.10, 
         random_state=42
     )
-    test_raw = load_data(os.path.join(path, 'dataset', 'test.json'))
+    test_raw = load_data(os.path.join(path,'test.json'))
 
     # Print dataset sizes
     print('Train samples:' , len(train_raw))
@@ -84,18 +83,22 @@ if __name__ == "__main__":
         print(f"🔧 Model: JointBERT ({bert_model_name})")
         print(f"📊 Vocab - Slots: {len(slot2id)}, Intents: {len(intent2id)}")
         
-        # Initialize BERT config and model for evaluation
-        config = BertConfig.from_pretrained(bert_model_name)
-        model = JointBERT.from_pretrained(
-            bert_model_name,
-            config=config,
-            num_intents=len(intent2id),
-            num_slots=len(slot2id)
-        ).to(device)
-        
-        # Load the saved model state
+        # Load the saved model state first to avoid downloading BERT weights
         try:
+            print("📊 Loading saved model weights...")
             model_state = torch.load(EVALUATION_MODEL_PATH, map_location=device)
+            
+            # Initialize BERT config (this doesn't download weights)
+            config = BertConfig.from_pretrained(bert_model_name)
+            
+            # Initialize model architecture without pre-trained weights
+            model = JointBERT(
+                config=config,
+                num_intents=len(intent2id),
+                num_slots=len(slot2id)
+            ).to(device)
+            
+            # Load our saved weights
             model.load_state_dict(model_state)
             print("✅ Model weights loaded successfully")
             
