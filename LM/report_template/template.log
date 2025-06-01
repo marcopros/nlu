@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  25 MAY 2025 13:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  1 JUN 2025 17:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -219,51 +219,55 @@ LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 15
  (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \hbox (badness 2913) in paragraph at lines 55--63
-[]\OT1/ptm/m/n/9 Finally, I em-ployed the Non-monotonically trig-gered
+Underfull \hbox (badness 1960) in paragraph at lines 34--35
+\OT1/ptm/m/n/9 trig-gered AvSGD switches from SGD when per-for-mance
  []
 
 
 
+
+Underfull \hbox (badness 1436) in paragraph at lines 41--42
+[]\OT1/ptm/b/n/9 AvSGD Op-ti-miza-tion Dy-nam-ics. \OT1/ptm/m/n/9 An im-por-tant ob-
+ []
+
 <images/part_A.png, id=1, 722.7pt x 433.62pt>
 File: images/part_A.png Graphic file (type png)
 <use images/part_A.png>
-Package pdftex.def Info: images/part_A.png  used on input line 74.
+Package pdftex.def Info: images/part_A.png  used on input line 45.
 (pdftex.def)             Requested size: 182.09831pt x 109.25826pt.
 <images/part_A_avsdg.png, id=3, 722.7pt x 433.62pt>
 File: images/part_A_avsdg.png Graphic file (type png)
 <use images/part_A_avsdg.png>
-Package pdftex.def Info: images/part_A_avsdg.png  used on input line 102.
+Package pdftex.def Info: images/part_A_avsdg.png  used on input line 52.
 (pdftex.def)             Requested size: 182.09831pt x 109.25826pt.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 59.
+(/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 59.
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+Overfull \hbox (120.7967pt too wide) in paragraph at lines 59--76
+ [][] 
+ []
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
+(/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.bbl
 
 [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 
- </Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/images/part_A.png>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 112.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 112.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Overfull \hbox (120.7967pt too wide) in paragraph at lines 112--129
- [][] 
- []
-
-(/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.bbl)
+ </Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/images/part_A.png> </Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/images/part_A_avsdg.png>])
 
 
 
 [2
 
- </Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/images/part_A_avsdg.png>] (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.aux)
+] (/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -272,13 +276,13 @@ L3 programming layer <2025-01-18>
 Here is how much of TeX's memory you used:
  4319 strings out of 473201
  70023 string characters out of 5716120
- 465681 words of memory out of 5000000
+ 468681 words of memory out of 5000000
  27520 multiletter control sequences out of 15000+600000
  580546 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,10n,79p,613b,344s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,10n,79p,852b,344s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.pdf" (2 pages, 121606 bytes).
+Output written on "/Users/marcoprosperi/Desktop/Università/Magistrale/Semester II/NLU/nlu/LM/report_template/template.pdf" (2 pages, 121929 bytes).
 PDF statistics:
  37 PDF objects out of 1000 (max. 8388607)
  20 compressed objects within 1 object stream
