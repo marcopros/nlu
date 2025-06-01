@@ -1,6 +1,16 @@
-# Natural Language Understanding & Language Modeling Project
+<p align='center'>
+    <h1 align="center">Natural Language Understanding</h1>
+    <p align="center">
+    NLU Project @ University of Trento, Italy
+    </p>
+    <p align='center'>
+      Prosperi Marco <br>
+      MSc in AIS - 24/25
+    </p>   
+</p>
 
-Implementation of Language Modeling and Natural Language Understanding tasks using traditional neural networks and transformer-based approaches.
+
+This repository contains implementations for **Language Modeling** and **Natural Language Understanding** tasks, featuring both traditional neural networks and transformer-based approaches.
 
 ## 🚀 Quick Start
 
