@@ -1,205 +1,77 @@
-<p align='center'>
-    <h1 align="center">Natural Language Understanding</h1>
-    <p align="center">
-    NLU Project @ University of Trento, Italy
-    </p>
-    <p align='center'>
-      Prosperi Marco <br>
-      MSc in AIS - 24/25
-    </p>   
-</p>
+# Natural Language Understanding & Language Modeling Project
 
-
-This repository contains implementations for **Language Modeling** and **Natural Language Understanding** tasks, featuring both traditional neural networks and transformer-based approaches.
-
-## 📁 Project Structure
-
-```
-├── LM/                          # Language Modeling
-│   ├── part_A/                  # Traditional RNN/LSTM approaches
-│   ├── part_B/                  # Advanced techniques (Weight Tying, Variational Dropout)
-│   └── report.pdf               # Detailed technical report
-├── NLU/                         # Natural Language Understanding
-│   ├── part_A/                  # BiLSTM for Joint Slot Filling & Intent Classification
-│   ├── part_B/                  # BERT-based approaches
-│   └── report.pdf               # Detailed technical report
-├── run_all_evaluations.py       # Automated evaluation suite
-├── run_evaluations.sh          # Bash wrapper for evaluations
-├── requirements.txt            # Python dependencies
-└── README.md                   # This file
-```
+Implementation of Language Modeling and Natural Language Understanding tasks using traditional neural networks and transformer-based approaches.
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-1. **Python Environment**: Python 3.8+ required
-2. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-### Running All Evaluations (Recommended)
-
-To test all trained models across all project parts:
-
 ```bash
-# Option 1: Using bash script
-./run_evaluations.sh
+# Install dependencies
+pip install -r requirements.txt
 
-# Option 2: Direct Python execution  
+# Run all evaluations
+./run_evaluations.sh
+# or
 python run_all_evaluations.py
 ```
 
-## 📊 Project Components
+## 📁 Project Overview
 
-### 🔤 Language Modeling (LM)
+| Component | Task | Models | Dataset | Metric |
+|-----------|------|--------|---------|--------|
+| **LM/part_A** | Language Modeling | RNN, LSTM variants | Penn TreeBank | Perplexity ↓ |
+| **LM/part_B** | Advanced LM | Weight Tying, Var. Dropout | Penn TreeBank | Perplexity ↓ |
+| **NLU/part_A** | Joint Slot+Intent | BiLSTM variants | ATIS | F1, Accuracy ↑ |
+| **NLU/part_B** | Joint Slot+Intent | BERT models | ATIS | F1, Accuracy ↑ |
 
-#### Part A: Traditional Approaches
-**Location**: `LM/part_A/`
+## 🔧 Running Individual Models
 
-**Models Implemented**:
-- **RNN Baseline**: Simple RNN architecture
-- **LSTM**: Long Short-Term Memory networks
-- **LSTM + Dropout**: LSTM with regularization
-- **LSTM + Dropout + AdamW**: Advanced optimization
+### Manual Evaluation
+1. Navigate to the model directory (`cd LM/part_A/`, `NLU/part_A/`, etc.)
+2. Edit `main.py`:
+   ```python
+   EVALUATION_MODE = True
+   MODEL_CONFIG = "model_name"  # See model lists below
+   EVALUATION_MODEL_PATH = "path/to/weights.pt"
+   ```
+3. Run: `python main.py`
 
-**Dataset**: Penn TreeBank
+### Available Models
 
-**Metric**: Perplexity (lower is better)
+<details>
+<summary><b>🔤 Language Modeling Models</b></summary>
 
-**How to Run**:
-```bash
-cd LM/part_A/
+**LM Part A** (`cd LM/part_A/`):
+- `RNN` → `bin/RNN_baseline/weights.pt`
+- `LSTM` → `bin/LSTM/weights.pt`
+- `LSTM_DROPOUT` → `bin/LSTM_Drop/weights.pt`
+- `LSTM_DROPOUT_ADAMW` → `bin/LSTM_Drop_AdamW/weights.pt`
 
-# For training
-python main.py
+**LM Part B** (`cd LM/part_B/`):
+- `BASE` → `bin/LSTM_WT/weights.pt`
+- `VARDROP` → `bin/LSTM_WT_VD/weights.pt`
+- `FULL` → `bin/LSTM_WT_VD_avSGD/weights.pt`
 
-# For evaluation (modify main.py first)
-# Set EVALUATION_MODE = True
-# Set MODEL_CONFIG to desired model ("RNN", "LSTM", "LSTM_DROPOUT", "LSTM_DROPOUT_ADAMW")
-# Set EVALUATION_MODEL_PATH to corresponding weights file
-python main.py
-```
+</details>
 
-#### Part B: Advanced Techniques
-**Location**: `LM/part_B/`
+<details>
+<summary><b>🗣️ NLU Models</b></summary>
 
-**Models Implemented**:
-- **BASE**: LSTM + Weight Tying
-- **VARDROP**: BASE + Variational Dropout
-- **FULL**: VARDROP + Averaged SGD
+**NLU Part A** (`cd NLU/part_A/`):
+- `IAS_BASELINE` → `bin/IAS_BASELINE/weights_1.pt`
+- `IAS_BIDIR` → `bin/IAS_BIDIR/weights_1.pt`
+- `IAS_BIDIR_DROPOUT` → `bin/IAS_BIDIR_DROPOUT/weights_1.pt`
 
-**Dataset**: Penn TreeBank
+**NLU Part B** (`cd NLU/part_B/`):
+- BERT-base → `bin/bert-base/weights.pt`
+- BERT-large → `bin/bert-large/weights.pt`
 
-**Metric**: Perplexity (lower is better)
+</details>
 
-**How to Run**:
-```bash
-cd LM/part_B/
+## 📈 Automated Evaluation Results
 
-# For training
-python main.py
+**Runtime**: 5-15 minutes total (individual models: 30s-2min, BERT-large: up to 10min)
 
-# For evaluation (modify main.py first)
-# Set EVALUATION_MODE = True  
-# Set MODEL_CONFIG to desired model ("BASE", "VARDROP", "FULL")
-# Set EVALUATION_MODEL_PATH to corresponding weights file
-python main.py
-```
-
-### 🗣️ Natural Language Understanding (NLU)
-
-#### Part A: BiLSTM Joint Models
-**Location**: `NLU/part_A/`
-
-**Models Implemented**:
-- **IAS_BASELINE**: Unidirectional LSTM
-- **IAS_BIDIR**: Bidirectional LSTM
-- **IAS_BIDIR_DROPOUT**: BiLSTM + Dropout
-
-**Dataset**: ATIS (Airline Travel Information System)
-
-**Metrics**: 
-- Slot F1 Score (higher is better)
-- Intent Accuracy (higher is better)
-
-**How to Run**:
-```bash
-cd NLU/part_A/
-
-# For training
-python main.py
-
-# For evaluation (modify main.py first)
-# Set EVALUATION_MODE = True
-# Set MODEL_CONFIG to desired model ("IAS_BASELINE", "IAS_BIDIR", "IAS_BIDIR_DROPOUT") 
-# Set EVALUATION_MODEL_PATH to corresponding weights file
-python main.py
-```
-
-#### Part B: BERT-based Approaches
-**Location**: `NLU/part_B/`
-
-**Models Implemented**:
-- **BERT-base**: bert-base-uncased fine-tuned for joint task
-- **BERT-large**: bert-large-uncased fine-tuned for joint task
-
-**Dataset**: ATIS (Airline Travel Information System)
-
-**Metrics**:
-- Slot F1 Score (higher is better)  
-- Intent Accuracy (higher is better)
-
-**How to Run**:
-```bash
-cd NLU/part_B/
-
-# For training
-python main.py
-
-# For evaluation (modify main.py first)
-# Set EVALUATION_MODE = True
-# Set EVALUATION_MODEL_PATH to desired weights file:
-# - "NLU/part_B/bin/bert-base/weights.pt" (for BERT-base)
-# - "NLU/part_B/bin/bert-large/weights.pt" (for BERT-large)
-python main.py
-```
-
-## 🔧 Configuration Guide
-
-Each project part follows a similar configuration pattern in `main.py`:
-
-### Common Configuration Variables:
-
-1. **EVALUATION_MODE**: 
-   - `True`: Load pre-trained model and evaluate
-   - `False`: Train new model from scratch
-
-2. **MODEL_CONFIG**: Select which model variant to use (varies by project part)
-
-3. **EVALUATION_MODEL_PATH**: Path to saved model weights for evaluation
-
-4. **Dataset Paths**: Modify if datasets are in different locations
-
-### Example Configuration (NLU Part B):
-```python
-# In main.py
-EVALUATION_MODE = True  # Set to True for evaluation
-EVALUATION_MODEL_PATH = "NLU/part_B/bin/bert-base/weights.pt"
-```
-
-## 📈 Automated Evaluation Suite
-
-The automated evaluation suite (`run_all_evaluations.py`) provides:
-
-### Features:
-- **Auto-Configuration**: Automatically modifies each `main.py` for evaluation mode
-- **Safe Execution**: Creates backups and restores original files
-- **Result Extraction**: Parses outputs to extract key metrics
-- **Comprehensive Summary**: Displays formatted results for all models
-
-### Sample Output:
+**Sample Output**:
 ```
 ================================================================================
                     📊 COMPREHENSIVE EVALUATION SUMMARY                    
@@ -218,107 +90,42 @@ The automated evaluation suite (`run_all_evaluations.py`) provides:
    🏆 Best F1: bert-large-uncased (F1: 0.9634)
 ```
 
-### Execution Time:
-- **Total Runtime**: 5-15 minutes (depending on hardware)
-- **Individual Models**: 30 seconds to 2 minutes each
-- **BERT Models**: Up to 10 minutes for BERT-large
+### Expected Results
+- **LM Part A**: Perplexity ~120 (RNN) → ~80 (LSTM+Dropout+AdamW)
+- **LM Part B**: Perplexity ~65 with advanced techniques
+- **NLU Part A**: F1 ~0.85-0.88, Intent accuracy ~0.91-0.93
+- **NLU Part B**: F1 ~0.95+, Intent accuracy ~0.96+ (BERT)
 
 ## 🛠️ Troubleshooting
 
-### Common Issues:
+<details>
+<summary><b>Common Issues & Solutions</b></summary>
 
-1. **Missing Model Files**:
-   ```
-   ⚠️ Model file not found: LM/part_A/bin/RNN_baseline/weights.pt
-   ```
-   **Solution**: Ensure all models have been trained and saved in expected locations
-
-2. **Import Errors**:
-   **Solution**: Run scripts from their respective directories or project root
-
-3. **CUDA/GPU Issues**:
-   **Solution**: Models automatically fall back to CPU if CUDA unavailable
-
-4. **Version Compatibility**:
-   - For BERT models, if you encounter missing keys (e.g., `position_ids`), the code handles this automatically with `strict=False` loading
-
-### Manual Model Evaluation:
-
-If you want to evaluate a specific model manually:
-
-```bash
-# Navigate to the appropriate directory
-cd LM/part_A/  # or LM/part_B/, NLU/part_A/, NLU/part_B/
-
-# Edit main.py to set:
-# EVALUATION_MODE = True
-# MODEL_CONFIG = "desired_model"  # (for LM and NLU part A)
-# EVALUATION_MODEL_PATH = "path/to/weights.pt"
-
-# Run evaluation
-python main.py
+**Missing Model Files**:
 ```
-
-## 📝 File Structure Details
-
-### Key Files in Each Part:
-
-- **`main.py`**: Main execution script with configuration options
-- **`model.py`**: Neural network architecture definitions
-- **`functions.py`**: Training and evaluation functions
-- **`utils.py`**: Data processing and utility functions
-- **`bin/`**: Directory containing trained model weights
-- **`dataset/`**: Directory containing training/test data
-
-### Model Weights Locations:
-
+⚠️ Model file not found: LM/part_A/bin/RNN_baseline/weights.pt
 ```
-LM/part_A/bin/
-├── RNN_baseline/weights.pt
-├── LSTM/weights.pt
-├── LSTM_Drop/weights.pt
-└── LSTM_Drop_AdamW/weights.pt
+→ Ensure all models have been trained and saved
 
-LM/part_B/bin/
-├── LSTM_WT/weights.pt
-├── LSTM_WT_VD/weights.pt
-└── LSTM_WT_VD_avSGD/weights.pt
+**Import/CUDA Errors**:
+→ Run scripts from correct directories; models auto-fallback to CPU
 
-NLU/part_A/bin/
-├── IAS_BASELINE/weights_1.pt
-├── IAS_BIDIR/weights_1.pt
-└── IAS_BIDIR_DROPOUT/weights_1.pt
+**Version Compatibility**:
+→ BERT models handle missing keys automatically with `strict=False`
 
-NLU/part_B/bin/
-├── bert-base/weights.pt
-└── bert-large/weights.pt
-```
-
-## 🎯 Expected Results
-
-### Language Modeling:
-- **Part A**: Perplexity improvements from ~120 (RNN) to ~80 (LSTM+Dropout+AdamW)
-- **Part B**: Further improvements to ~65 with advanced techniques
-
-### NLU Tasks:
-- **Part A**: F1 scores ~0.85-0.88, Intent accuracy ~0.91-0.93
-- **Part B**: F1 scores ~0.95+, Intent accuracy ~0.96+ with BERT
-
-## 📚 Additional Resources
-
-- **Technical Reports**: Detailed analysis available in `LM/report.pdf` and `NLU/report.pdf`
-- **Code Documentation**: Each module contains inline documentation
-- **Dataset Information**: Standard Penn TreeBank (LM) and ATIS (NLU) datasets
-
-## 🔍 Debugging
-
-For verbose output during evaluation:
+**Debugging**:
 ```bash
 python run_all_evaluations.py 2>&1 | tee evaluation_log.txt
 ```
 
-This saves all output to `evaluation_log.txt` for debugging purposes.
+</details>
+
+## 📚 Additional Resources
+
+- **Technical Reports**: `LM/report.pdf`, `NLU/report.pdf`
+- **Datasets**: Penn TreeBank (LM), ATIS (NLU)
+- **Code Documentation**: Inline documentation in each module
 
 ---
 
-For questions or issues, please refer to the individual README files in each project part or check the technical reports for detailed methodology and results.
+*For detailed methodology and results, refer to the technical reports in each project part.*
