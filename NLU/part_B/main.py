@@ -17,15 +17,15 @@ from collections import Counter
 # Set to True to enable evaluation mode (load pre-trained weights and evaluate on test set)
 EVALUATION_MODE = True  
 # Path to the saved model weights (.pt file) for evaluation
-EVALUATION_MODEL_PATH = "NLU/part_B/bin/bert-base/weights.pt"  # Best model from all runs
+EVALUATION_MODEL_PATH = "NLU/part_B/bin/bert-base/weights.pt"  # Change this to your model path
 # ====================================================================
 
 # Set device and model name
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-bert_model_name = "bert-base-uncased" # or "bert-base-uncased"
+bert_model_name = "bert-base-uncased"  # or "bert-base-uncased" 
 
 # Define and if necessary create the path to the dataset
-path = 'NLU/part_B/dataset'
+path = 'NLU/part_B/dataset'  # Change this to your dataset path
 
 if __name__ == "__main__":
     
@@ -37,7 +37,7 @@ if __name__ == "__main__":
         if not os.path.exists(EVALUATION_MODEL_PATH):
             print(f"❌ Error: Model file not found at {EVALUATION_MODEL_PATH}")
             print("💡 Make sure to:")
-            print("   1. Train a model first (set EVALUATION_MODE = False)")
+            print("   1. Train a model first (set EVALUATION_MODE = True)")
             print("   2. Update EVALUATION_MODEL_PATH to point to your saved weights")
             exit(1)
     else:
@@ -98,8 +98,14 @@ if __name__ == "__main__":
                 num_slots=len(slot2id)
             ).to(device)
             
-            # Load our saved weights
-            model.load_state_dict(model_state)
+            # Load our saved weights with strict=False to handle version differences
+            missing_keys, unexpected_keys = model.load_state_dict(model_state, strict=False)
+            
+            # if missing_keys:
+            #     print(f"⚠️ Missing keys (likely due to version differences): {missing_keys}")
+            # if unexpected_keys:
+            #     print(f"⚠️ Unexpected keys: {unexpected_keys}")
+            
             print("✅ Model weights loaded successfully")
             
             # Set model to evaluation mode

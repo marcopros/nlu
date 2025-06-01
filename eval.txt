@@ -1,0 +1,104 @@
+================================================================================
+                          🚀 AUTOMATED EVALUATION SUITE                          
+================================================================================
+
+Starting comprehensive evaluation of all trained models...
+This may take several minutes to complete.
+
+------------------------------------------------------------
+🔤 LANGUAGE MODELING - PART A
+------------------------------------------------------------
+
+📊 Evaluating RNN...
+   🔄 Running RNN...
+✅ RNN: Perplexity = 173.2244
+
+📊 Evaluating LSTM...
+   🔄 Running LSTM...
+✅ LSTM: Perplexity = 137.3128
+
+📊 Evaluating LSTM_DROPOUT...
+   🔄 Running LSTM_DROPOUT...
+✅ LSTM_DROPOUT: Perplexity = 123.1385
+
+📊 Evaluating LSTM_DROPOUT_ADAMW...
+   🔄 Running LSTM_DROPOUT_ADAMW...
+✅ LSTM_DROPOUT_ADAMW: Perplexity = 105.4861
+
+------------------------------------------------------------
+🔤 LANGUAGE MODELING - PART B
+------------------------------------------------------------
+
+📊 Evaluating BASE...
+   🔄 Running BASE...
+✅ BASE: Perplexity = 95.1068
+
+📊 Evaluating VARDROP...
+   🔄 Running VARDROP...
+✅ VARDROP: Perplexity = 96.6821
+
+📊 Evaluating FULL...
+   🔄 Running FULL...
+✅ FULL: Perplexity = 89.4696
+
+------------------------------------------------------------
+🗣️ NATURAL LANGUAGE UNDERSTANDING - PART A
+------------------------------------------------------------
+
+📊 Evaluating IAS_BASELINE...
+   🔄 Running IAS_BASELINE...
+✅ IAS_BASELINE: Slot F1 = 0.9255, Intent Acc = 0.9339
+
+📊 Evaluating IAS_BIDIR...
+   🔄 Running IAS_BIDIR...
+✅ IAS_BIDIR: Slot F1 = 0.9391, Intent Acc = 0.9384
+
+📊 Evaluating IAS_BIDIR_DROPOUT...
+   🔄 Running IAS_BIDIR_DROPOUT...
+✅ IAS_BIDIR_DROPOUT: Slot F1 = 0.9443, Intent Acc = 0.9451
+
+------------------------------------------------------------
+🗣️ NATURAL LANGUAGE UNDERSTANDING - PART B
+------------------------------------------------------------
+
+📊 Evaluating bert-base-uncased...
+   🔄 Running bert-base-uncased...
+✅ bert-base-uncased: Slot F1 = 0.9547, Intent Acc = 0.9686
+
+📊 Evaluating bert-large-uncased...
+   🔄 Running bert-large-uncased...
+✅ bert-large-uncased: Slot F1 = 0.9490, Intent Acc = 0.9754
+
+================================================================================
+                       📊 COMPREHENSIVE EVALUATION SUMMARY                       
+================================================================================
+
+🔤 Language Modeling - Part A (Perplexity ↓)
+   RNN                 : 173.2244
+   LSTM                : 137.3128
+   LSTM_DROPOUT        : 123.1385
+   LSTM_DROPOUT_ADAMW  : 105.4861
+   🏆 Best: LSTM_DROPOUT_ADAMW (PPL: 105.4861)
+
+🔤 Language Modeling - Part B (Perplexity ↓)
+   BASE                :  95.1068
+   VARDROP             :  96.6821
+   FULL                :  89.4696
+   🏆 Best: FULL (PPL: 89.4696)
+
+🗣️ NLU - Part A (F1 Score ↑ | Intent Acc ↑)
+   IAS_BASELINE        : F1=0.9255 | Acc=0.9339
+   IAS_BIDIR           : F1=0.9391 | Acc=0.9384
+   IAS_BIDIR_DROPOUT   : F1=0.9443 | Acc=0.9451
+   🏆 Best F1: IAS_BIDIR_DROPOUT (F1: 0.9443)
+
+🗣️ NLU - Part B (F1 Score ↑ | Intent Acc ↑)
+   bert-base-uncased   : F1=0.9547 | Acc=0.9686
+   bert-large-uncased  : F1=0.9490 | Acc=0.9754
+   🏆 Best F1: bert-base-uncased (F1: 0.9547)
+
+================================================================================
+
+✅ Evaluation completed in 231.8 seconds
+
+✅ Evaluation completed successfully!

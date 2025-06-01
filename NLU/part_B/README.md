@@ -37,5 +37,5 @@ This project implements a **JointBERT-based model** for slot filling and intent 
 Experiments were done using both `bert-base-uncased` and `bert-large-uncased` pretrained models.
 | Model                              | Mean Slot F1 | Mean Intent Acc. |
 |-------------------------------------|:------------:|:----------------:|
-| JointBERT  (base)                    |    0.951     |      0.969       |
+| JointBERT  (base)                    |    0.953     |      0.972       |
 | JointBERT (large)              |    0.955     |      0.978       |
