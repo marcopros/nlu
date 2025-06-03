@@ -12,13 +12,13 @@ import torch.optim.lr_scheduler as lr_scheduler
 from model import *
 
 # Configuration parameters - modify these to choose model configuration
-MODEL_CONFIG = "FULL"  # Options: "BASE", "VARDROP", "FULL"   <-- Change this to select the model configuration
+MODEL_CONFIG = "BASE"  # Options: "BASE", "VARDROP", "FULL"   <-- Change this to select the model configuration
 # "BASE": LSTM + Weight Tying
 # "VARDROP": LSTM + Weight Tying + Variational Dropout  
 # "FULL": LSTM + Weight Tying + Variational Dropout + AvSGD
 
 # Evaluation configuration
-EVALUATION_MODE = True  # Set to True to load and evaluate a pre-trained model
+EVALUATION_MODE = False  # Set to True to load and evaluate a pre-trained model
 EVALUATION_MODEL_PATH = "LM/part_B/bin/LSTM_WT_VD_avSGD/weights.pt"  # Path to the model weights for evaluation
 # Available model paths:
 # "LM/part_B/bin/LSTM_WT/weights.pt"
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     if MODEL_CONFIG == "BASE":
         print("Using: LSTM + Weight Tying")
         model = LM_LSTM_WT(emb_size, hid_size, vocab_len, pad_index=lang.word2id["<pad>"]).to(DEVICE)
-        lr = 0.010
+        lr = 0.0015
         optimizer = optim.Adam(model.parameters(), lr=lr)
         scheduler = None
         use_asgd = False
