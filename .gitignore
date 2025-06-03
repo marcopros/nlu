@@ -1,4 +1,32 @@
 __pycache__/
 NLU/part_B/**/*.pt
 
+# LaTeX template files (keep only PDFs)
+**/report_template/**/*.aux
+**/report_template/**/*.bbl
+**/report_template/**/*.blg
+**/report_template/**/*.fdb_latexmk
+**/report_template/**/*.fls
+**/report_template/**/*.log
+**/report_template/**/*.synctex.gz
+**/report_template/**/*.tex
+**/report_template/**/*.bst
+**/report_template/**/*.sty
+**/report_template/**/*.bib
 
+**/report_temp/**/*.aux
+**/report_temp/**/*.bbl
+**/report_temp/**/*.blg
+**/report_temp/**/*.fdb_latexmk
+**/report_temp/**/*.fls
+**/report_temp/**/*.log
+**/report_temp/**/*.synctex.gz
+**/report_temp/**/*.tex
+**/report_temp/**/*.bst
+**/report_temp/**/*.sty
+**/report_temp/**/*.bib
+
+# Keep template PDFs
+!**/template.pdf
+
+.DS_Store
