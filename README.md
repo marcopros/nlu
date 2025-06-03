@@ -12,6 +12,23 @@
 
 This repository contains implementations for **Language Modeling** and **Natural Language Understanding** tasks, featuring both traditional neural networks and transformer-based approaches.
 
+## 📁 Project Structure
+
+```
+├── LM/                          # Language Modeling
+│   ├── part_A/                  # Traditional RNN/LSTM approaches
+│   ├── part_B/                  # Advanced techniques (Weight Tying, Variational Dropout)
+│   └── report.pdf               # Detailed technical report
+├── NLU/                         # Natural Language Understanding
+│   ├── part_A/                  # BiLSTM for Joint Slot Filling & Intent Classification
+│   ├── part_B/                  # BERT-based approaches
+│   └── report.pdf               # Detailed technical report
+├── run_all_evaluations.py       # Automated evaluation suite
+├── run_evaluations.sh          # Bash wrapper for evaluations
+├── requirements.txt            # Python dependencies
+└── README.md                   # This file
+```
+
 ## 🚀 Quick Start
 
 ```bash
