@@ -64,12 +64,19 @@ Icon?
 **/report_temp/*.bst
 **/report_temp/*.sty
 **/report_temp/*.bib
+**/report/*.tex
+**/report/*.bst
+**/report/*.sty
+**/report/*.bib
+**/report/template_clean.tex
 
 # LaTeX template directories
 **/report_template/IEEEtran/
 **/report_template/images/
 **/report_temp/IEEEtran/
 **/report_temp/images/
+**/report/IEEEtran/
+**/report/images/
 
 # Keep important PDFs
 !**/template.pdf
