@@ -59,10 +59,17 @@ Icon?
 **/report_template/*.bst
 **/report_template/*.sty
 **/report_template/*.bib
+**/report_template/template_clean.tex
 **/report_temp/*.tex
 **/report_temp/*.bst
 **/report_temp/*.sty
 **/report_temp/*.bib
+
+# LaTeX template directories
+**/report_template/IEEEtran/
+**/report_template/images/
+**/report_temp/IEEEtran/
+**/report_temp/images/
 
 # Keep important PDFs
 !**/template.pdf
@@ -77,5 +84,3 @@ Icon?
 
 # Jupyter Notebook
 .ipynb_checkpoints
-
-.DS_Store
