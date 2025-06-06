@@ -30,7 +30,7 @@ def align_hyp(ref, hyp):
 
 
 def conlleval(data, otag='O'):
-    # token, segment & class level counts for TP, TP+FP, TP+FN
+    # token, segment & class level counts for TP, TP+FP or TP+FN
     tok = stats()
     seg = stats()
     cls = {}
